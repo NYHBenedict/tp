@@ -317,11 +317,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. Portability: Should work on any mainstream OS as long as it has Java 17 or higher installed.
 
-*{More to be added}*
+2. Performance: Should be able to hold up to 1000 students per course (with associated grades) without a noticeable sluggishness in performance for typical usage (e.g., listing all students/grades, adding/removing entries).
+
+3. Usability: A user with above‑average typing speed for regular English text (i.e., not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than a mouse.
+
+4. Reliability: Data should persist across application restarts without loss, even after crashes or unexpected closures.
+
+5. Usability (CLI): Command responses should appear within 2 seconds for typical operations on 1000‑student datasets.
+
+6. Usability (Error Messages): All error messages should be specific, actionable, and indicate exactly what went wrong and how to fix it (e.g., "Invalid course code. Example: c/CS2103T").
+
+7. Scalability: Should support up to 20 courses simultaneously without performance degradation.
+
+8. Maintainability: Codebase should follow SOLID principles and have test coverage >80% for core logic (student/grade CRUD).
+
+9. Usability (Input Validation): All commands should validate parameters before processing and reject invalid inputs immediately with clear feedback.
+
+10. Accessibility: Command syntax should be intuitive and consistent across features (e.g., all CRUD ops use c/COURSE_CODE id/STUDENT_ID prefix pattern).
+
+
 
 ### Glossary
 
