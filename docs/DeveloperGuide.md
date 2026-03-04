@@ -288,40 +288,154 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `GradeBookPlus` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use Case: Add a student**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1. User requests to add a student to the list, including the course code (required), student ID (required), name 
+(required) and email (optional) in the command.
+2. GradeBookPlus adds the student.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. User inputs invalid course code.
+  * 2a1. GradeBookPlus shows an error message.
 
-  Use case ends.
+    Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. User inputs invalid student ID.
+    * 3a1. GradeBookPlus shows an error message.
 
-    * 3a1. AddressBook shows an error message.
+      Use case ends.
 
-      Use case resumes at step 2.
+**Use case: Delete a student**
+
+**MSS**
+
+1. User requests to delete a specific student in the list, including the student's name and course code in the command.
+2. GradeBookPlus deletes the student
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The specified student cannot be found.
+  * 2a1. GradeBookPlus shows an error message
+
+    Use case ends.
+
+* 3a. The given course code is invalid.
+
+    * 3a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+**Use case: Add a course**
+
+**MSS**
+
+1. User requests to add a course, including its course code
+2. GradeBookPlus adds the new course
+
+**Use case: Add a course assessment**
+
+**MSS**
+
+1. User requests to add an assessment to an existing course, including the course code and the assessment name in the 
+command command.
+2. GradeBookPlus adds an assessment to the selected course.
+
+**Extensions**
+
+* 2a. Specified course cannot be found.
+  * 2a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+**Use case: Add a student's grade**
+
+**MSS**
+
+1. User requests to add score to a student in a course, including the student ID, course code, assessment name, and 
+score in the command.
+2. GradeBookPlus adds the score to the specified student.
+
+**Extensions**
+
+* 2a. Student not found.
+  * 2a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+* 3a. Course not found.
+  * 3a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+* 4a. Assessment not found.
+    * 4a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+**Use case: Remove a student's grade**
+
+**MSS**
+
+1. User requests to remove score from an assessment in a course for a student, including the student ID, course code and
+assessment name in the command.
+2. GradeBookPlus removes the score in the assessment tied to the student in the course
+
+**Extensions**
+
+* 2a. Student not found.
+    * 2a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 3a. Course not found.
+    * 3a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 4a. Assessment not found.
+    * 4a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 5a. Score not found (assessment has no score to begin with).
+    * 5a1. GradeBookPlus shows an error message.
+
+      Use case ends.
 
 *{More to be added}*
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. Portability: Should work on any mainstream OS as long as it has Java 17 or higher installed.
 
-*{More to be added}*
+2. Performance: Should be able to hold up to 1000 students per course (with associated grades) without a noticeable sluggishness in performance for typical usage (e.g., listing all students/grades, adding/removing entries).
+
+3. Usability: A user with above‑average typing speed for regular English text (i.e., not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than a mouse.
+
+4. Reliability: Data should persist across application restarts without loss, even after crashes or unexpected closures.
+
+5. Usability (CLI): Command responses should appear within 2 seconds for typical operations on 1000‑student datasets.
+
+6. Usability (Error Messages): All error messages should be specific, actionable, and indicate exactly what went wrong and how to fix it (e.g., "Invalid course code. Example: c/CS2103T").
+
+7. Scalability: Should support up to 20 courses simultaneously without performance degradation.
+
+8. Maintainability: Codebase should follow SOLID principles and have test coverage >80% for core logic (student/grade CRUD).
+
+9. Usability (Input Validation): All commands should validate parameters before processing and reject invalid inputs immediately with clear feedback.
+
+10. Accessibility: Command syntax should be intuitive and consistent across features (e.g., all CRUD ops use c/COURSE_CODE id/STUDENT_ID prefix pattern).
+
+
 
 ### Glossary
 
