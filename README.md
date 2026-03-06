@@ -1,17 +1,43 @@
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
+# GradeBookPlus
 
-![Ui](docs/images/Ui.png)
+[![Java CI](https://github.com/AY2526S2-CS2103T-F12-3/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S2-CS2103T-F12-3/tp/actions/workflows/gradle.yml)
 
-## GradeBookPlus
-website link: https://ay2526s2-cs2103t-f12-3.github.io/tp/ 
+GradeBookPlus is a desktop app for **academic educators** to manage and interpret student assessment results. It consolidates grades across assignments and tests into a single system, reducing manual record-keeping and providing clearer insight into overall class performance and academic trends.
 
-* This is **a sample project for Software Engineering (SE) students**.<br>
-  Example usages:
-  * as a starting point of a course project (as opposed to writing everything from scratch)
-  * as a case study
-* The project simulates an ongoing software project for a desktop application (called _AddressBook_) used for managing contact details.
-  * It is **written in OOP fashion**. It provides a **reasonably well-written** code base **bigger** (around 6 KLoC) than what students usually write in beginner-level SE modules, without being overwhelmingly big.
-  * It comes with a **reasonable level of user and developer documentation**.
-* It is named `AddressBook Level 3` (`AB3` for short) because it was initially created as a part of a series of `AddressBook` projects (`Level 1`, `Level 2`, `Level 3` ...).
-* For the detailed documentation of this project, see the **[Address Book Product Website](https://se-education.org/addressbook-level3)**.
-* This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.
+## Target Users
+
+Academic educators responsible for managing student assessment records in a course.
+
+## Value Proposition
+
+GradeBookPlus helps educators manage and interpret student assessment results by consolidating grades across assignments and tests into a single system, reducing manual record-keeping and enabling clearer insight into overall class performance and academic trends.
+
+## Scope
+
+GradeBookPlus focuses on **managing and summarising student assessment data within a single course**.
+
+Not supported (out of scope):
+
+- Attendance tracking
+- Feedback delivery
+- Official transcript generation
+
+## Must-have Features (MVP)
+
+### Course & Roster
+
+- **Add student** to a course roster
+- **Remove student** from a course roster (also removes the student’s grades in that course)
+- **List students** in a course
+
+### Grades
+
+- **Add grade** for a student’s assessment component
+- **Remove grade** for a student’s assessment component
+
+## Quick Start
+
+1. Ensure you have **Java 17** installed.
+2. Coming soon...
+
+- This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.

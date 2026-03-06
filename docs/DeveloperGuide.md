@@ -2,63 +2,66 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
 
---------------------------------------------------------------------------------------------------------------------
+- Table of Contents
+  {:toc}
+
+---
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+- {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Design**
 
 <div markdown="span" class="alert alert-primary">
 
 :bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+
 </div>
 
 ### Architecture
 
 <img src="images/ArchitectureDiagram.png" width="280" />
 
-The ***Architecture Diagram*** given above explains the high-level design of the App.
+The **_Architecture Diagram_** given above explains the high-level design of the App.
 
 Given below is a quick overview of main components and how they interact with each other.
 
 **Main components of the architecture**
 
 **`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+
+- At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
+- At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+- [**`UI`**](#ui-component): The UI of the App.
+- [**`Logic`**](#logic-component): The command executor.
+- [**`Model`**](#model-component): Holds the data of the App in memory.
+- [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
 Each of the four main components (also shown in the diagram above),
 
-* defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+- defines its _API_ in an `interface` with the same name as the Component.
+- implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -78,10 +81,10 @@ The `UI` component uses the JavaFx UI framework. The layout of these UI parts ar
 
 The `UI` component,
 
-* executes user commands using the `Logic` component.
-* listens for changes to `Model` data so that the UI can be updated with the modified data.
-* keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+- executes user commands using the `Logic` component.
+- listens for changes to `Model` data so that the UI can be updated with the modified data.
+- keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
+- depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
 
 ### Logic component
 
@@ -111,28 +114,28 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <img src="images/ParserClasses.png" width="600"/>
 
 How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+
+- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
+- All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
+
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
 
-
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
-* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+- stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+- stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+- stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+- does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
 </div>
-
 
 ### Storage component
 
@@ -141,15 +144,16 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
-* depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
+
+- can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+- inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
+- depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Implementation**
 
@@ -161,9 +165,9 @@ This section describes some noteworthy details on how certain features are imple
 
 The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
+- `VersionedAddressBook#commit()` — Saves the current address book state in its history.
+- `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
+- `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
 
@@ -228,14 +232,14 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+- **Alternative 1 (current choice):** Saves the entire address book.
+  - Pros: Easy to implement.
+  - Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
+- **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+  - Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  - Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
 
@@ -243,18 +247,17 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
-
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Documentation, logging, testing, configuration, dev-ops**
 
-* [Documentation guide](Documentation.md)
-* [Testing guide](Testing.md)
-* [Logging guide](Logging.md)
-* [Configuration guide](Configuration.md)
-* [DevOps guide](DevOps.md)
+- [Documentation guide](Documentation.md)
+- [Testing guide](Testing.md)
+- [Logging guide](Logging.md)
+- [Configuration guide](Configuration.md)
+- [DevOps guide](DevOps.md)
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Appendix: Requirements**
 
@@ -262,66 +265,209 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+- Role: University-level academic educator teaching one or more undergraduate courses each semester
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+- Class size: Manages assessment records for classes ranging from dozens to a few hundred students
 
+- Core tasks: Regularly updates grades after assignments, tests, and other assessments
+
+- Work setup: Works primarily alone on a personal computer
+
+- Responsibility: Maintains accurate, up-to-date grade records throughout the semester
+
+- Pain points: Manual bookkeeping and repeated calculations are time-consuming and reduce time for teaching/student engagement
+
+- Needs/values: Efficiency, clarity, and reduced administrative overhead
+
+- Tech comfort: Comfortable using simple command-based tools if they speed up work and improve reliability
+
+**Value proposition**: GradeBookPlus helps educators manage and interpret student assessment results by consolidating grades across assignments and tests into a single system, reducing manual record-keeping and enabling clearer insight into overall class performance and academic trends.
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a …                            | I want to …                                               | So that I can…                                            |
+| -------- | --------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
+| `* * *`  | potential user exploring the app  | see the app populated with sample data                    | easily see how the app will look like when it is in use.  |
+| `* * *`  | first time user                   | see the available features                                | understand how the application works.                     |
+| `* *`    | new user                          | to test the available features                            | see an example of how the application works.              |
+| `* * *`  | new user                          | start with a clean table                                  | not have extra unnecessary data                           |
+| `* * *`  | new user                          | create a new course in the system                         | manage assessment records for each course separately      |
+| `* * *`  | new user                          | add a list of students to a course using a single command | quickly initialize the class roster                       |
+| `* * *`  | new user                          | edit student records                                      | keep my class list accurate throughout the semester       |
+| `* * *`  | beginner user                     | remove student records                                    | keep my class list accurate when students drop the course |
+| `* * *`  | user who teaches multiple courses | switch between courses                                    | view and update the correct class records quickly         |
+| `* * *`  | user                              | add an assessment component                               | organize grades by assignments/tests/exams                |
+| `* * *`  | user                              | edit an assessment component                              | reflect changes in assessment structure                   |
+| `* * *`  | user                              | delete an assessment component                            | remove assessments that are no longer relevant            |
+| `* * *`  | user                              | record a student’s score for an assessment                | keep track of student performance                         |
+| `* * *`  | user                              | update a student’s score                                  | correct mistakes or reflect regrading                     |
+| `* * *`  | user                              | view a student’s scores                                   | understand how they performed across assessments          |
+| `* * *`  | user                              | view the overall grade for a student                      | quickly see their standing                                |
+| `* * *`  | user                              | list all students and their overall grades                | review the class performance at a glance                  |
+| `* *`    | user                              | search for a student by name or ID                        | locate records quickly in a large cohort                  |
+| `* *`    | user                              | filter students by performance band                       | identify students who need attention or who excel         |
+| `* *`    | user                              | sort students by name or overall grade                    | navigate the records more efficiently                     |
+| `* *`    | user                              | compute weighted totals automatically                     | save time and reduce calculation errors                   |
+| `* *`    | user                              | set weightages for assessment components                  | ensure overall grades are computed correctly              |
+| `* *`    | user                              | see grade breakdown for a student                         | explain how an overall grade was derived                  |
+| `* *`    | user                              | export grade data to CSV                                  | submit results or back up data                            |
+| `* *`    | user                              | import data from CSV                                      | reduce manual entry when setting up or migrating records  |
+| `* *`    | user                              | undo the last action                                      | recover from accidental edits                             |
+| `* *`    | user                              | view usage instructions                                   | refer to instructions when I forget how to use the app    |
+| `* *`    | user                              | get clear error messages for invalid commands             | fix mistakes quickly without guessing                     |
+| `* *`    | user                              | see confirmation before deleting important data           | avoid accidental loss of records                          |
+| `* *`    | user                              | save data automatically                                   | not lose progress if the app closes unexpectedly          |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `GradeBookPlus` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use Case: Add a student**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1. User requests to add a student to the list, including the course code (required), student ID (required), name 
+(required) and email (optional) in the command.
+2. GradeBookPlus adds the student.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. User inputs invalid course code.
+  * 2a1. GradeBookPlus shows an error message.
 
-  Use case ends.
+    Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. User inputs invalid student ID.
+    * 3a1. GradeBookPlus shows an error message.
 
-    * 3a1. AddressBook shows an error message.
+      Use case ends.
 
-      Use case resumes at step 2.
+**Use case: Delete a student**
 
-*{More to be added}*
+**MSS**
+
+1. User requests to delete a specific student in the list, including the student's name and course code in the command.
+2. GradeBookPlus deletes the student
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The specified student cannot be found.
+  * 2a1. GradeBookPlus shows an error message
+
+    Use case ends.
+
+* 3a. The given course code is invalid.
+
+    * 3a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+**Use case: Add a course**
+
+**MSS**
+
+1. User requests to add a course, including its course code
+2. GradeBookPlus adds the new course
+
+**Use case: Add a course assessment**
+
+**MSS**
+
+1. User requests to add an assessment to an existing course, including the course code and the assessment name in the 
+command command.
+2. GradeBookPlus adds an assessment to the selected course.
+
+**Extensions**
+
+* 2a. Specified course cannot be found.
+  * 2a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+**Use case: Add a student's grade**
+
+**MSS**
+
+1. User requests to add score to a student in a course, including the student ID, course code, assessment name, and 
+score in the command.
+2. GradeBookPlus adds the score to the specified student.
+
+**Extensions**
+
+* 2a. Student not found.
+  * 2a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+* 3a. Course not found.
+  * 3a1. GradeBookPlus shows an error message.
+
+    Use case ends.
+
+* 4a. Assessment not found.
+    * 4a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+**Use case: Remove a student's grade**
+
+**MSS**
+
+1. User requests to remove score from an assessment in a course for a student, including the student ID, course code and
+assessment name in the command.
+2. GradeBookPlus removes the score in the assessment tied to the student in the course
+
+**Extensions**
+
+* 2a. Student not found.
+    * 2a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 3a. Course not found.
+    * 3a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 4a. Assessment not found.
+    * 4a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+* 5a. Score not found (assessment has no score to begin with).
+    * 5a1. GradeBookPlus shows an error message.
+
+      Use case ends.
+
+_{More to be added}_
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. Portability: Should work on any mainstream OS as long as it has Java 17 or higher installed.
 
-*{More to be added}*
+2. Performance: Should be able to hold up to 1000 students per course (with associated grades) without a noticeable sluggishness in performance for typical usage (e.g., listing all students/grades, adding/removing entries).
+
+3. Usability: A user with above‑average typing speed for regular English text (i.e., not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than a mouse.
+
+4. Reliability: Data should persist across application restarts without loss, even after crashes or unexpected closures.
+
+5. Usability (CLI): Command responses should appear within 2 seconds for typical operations on 1000‑student datasets.
+
+6. Usability (Error Messages): All error messages should be specific, actionable, and indicate exactly what went wrong and how to fix it (e.g., "Invalid course code. Example: c/CS2103T").
+
+7. Scalability: Should support up to 20 courses simultaneously without performance degradation.
+
+8. Maintainability: Codebase should follow SOLID principles and have test coverage >80% for core logic (student/grade CRUD).
+
+9. Usability (Input Validation): All commands should validate parameters before processing and reject invalid inputs immediately with clear feedback.
+
+10. Accessibility: Command syntax should be intuitive and consistent across features (e.g., all CRUD ops use c/COURSE_CODE id/STUDENT_ID prefix pattern).
 
 ### Glossary
 
@@ -351,24 +497,21 @@ testers are expected to do more *exploratory* testing.
 ### Launch and shutdown
 
 1. Initial launch
-
    1. Download the jar file and copy into an empty folder
 
    1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
-
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+      Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
 
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
-
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: `delete 1`<br>
@@ -385,7 +528,6 @@ testers are expected to do more *exploratory* testing.
 ### Saving data
 
 1. Dealing with missing/corrupted data files
-
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
