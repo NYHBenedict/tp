@@ -7,11 +7,16 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import java.util.Optional;
+
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.course.Course;
+import seedu.address.model.course.CourseCode;
 import seedu.address.model.person.Person;
+import seedu.address.model.student.Student;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -22,6 +27,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private Optional<CourseCode> currentCourseForDisplay = Optional.empty();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -128,6 +134,48 @@ public class ModelManager implements Model {
         filteredPersons.setPredicate(predicate);
     }
 
+    //=========== Course / Student ================================================================================
+
+    @Override
+    public boolean hasCourse(CourseCode code) {
+        return addressBook.hasCourse(code);
+    }
+
+    @Override
+    public void setCurrentCourseForDisplay(Optional<CourseCode> code) {
+        this.currentCourseForDisplay = code != null ? code : Optional.empty();
+    }
+
+    @Override
+    public Optional<CourseCode> getCurrentCourseForDisplay() {
+        return currentCourseForDisplay;
+    }
+
+    @Override
+    public ObservableList<Student> getFilteredStudentList() {
+        return currentCourseForDisplay
+                .flatMap(code -> addressBook.getCourseList().stream()
+                        .filter(c -> c.getCourseCode().equals(code))
+                        .findFirst())
+                .map(course -> course.getStudents().asUnmodifiableObservableList())
+                .orElse(javafx.collections.FXCollections.emptyObservableList());
+    }
+
+    @Override
+    public void addCourse(CourseCode code) {
+        addressBook.addCourse(new Course(code));
+    }
+
+    @Override
+    public void addStudentToCourse(CourseCode code, Student student) {
+        addressBook.addStudentToCourse(code, student);
+    }
+
+    @Override
+    public boolean removeStudentFromCourse(CourseCode code, seedu.address.model.student.StudentId studentId) {
+        return addressBook.removeStudentFromCourse(code, studentId);
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -142,7 +190,8 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && currentCourseForDisplay.equals(otherModelManager.currentCourseForDisplay);
     }
 
 }

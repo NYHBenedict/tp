@@ -10,11 +10,15 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
+import seedu.address.model.course.CourseCode;
+import seedu.address.model.student.Student;
+import seedu.address.model.student.StudentId;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -155,6 +159,41 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean hasCourse(CourseCode code) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setCurrentCourseForDisplay(Optional<CourseCode> code) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Optional<CourseCode> getCurrentCourseForDisplay() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Student> getFilteredStudentList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addCourse(CourseCode code) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addStudentToCourse(CourseCode code, Student student) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean removeStudentFromCourse(CourseCode code, StudentId studentId) {
             throw new AssertionError("This method should not be called.");
         }
     }

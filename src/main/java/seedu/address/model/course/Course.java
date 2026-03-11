@@ -3,41 +3,55 @@ package seedu.address.model.course;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Objects;
-import java.util.ArrayList;
+import java.util.Optional;
 
-import seedu.address.model.assessment.Assessment;
-import seedu.address.model.grade.Grade;
+import seedu.address.model.assessment.UniqueAssessmentList;
+import seedu.address.model.grade.UniqueGradeList;
 import seedu.address.model.student.Student;
+import seedu.address.model.student.UniqueStudentList;
 
 public class Course {
-    private final static ArrayList<Course> courseCodeList;
-    private final static ArrayList<Student> students;
-    private final static ArrayList<Assessment> assessments;
-    private final static ArrayList<Grade> grades;
-    private final String courseCode;
+    private final CourseCode courseCode;
+    private final UniqueStudentList students;
+    private final UniqueAssessmentList assessments;
+    private final UniqueGradeList grades;
 
-    public Course(String courseCode) {
+    public Course(CourseCode courseCode) {
         requireAllNonNull(courseCode);
         this.courseCode = courseCode;
-        this.students = Student.getStudentsList(); // function to be created; students that exist in this course
-        this.assessments = Student.getAssessmentsList(); // function to be created; assessments that exist in this course
-        this.grades = Student.getGradesList(); // function to be created ; grades of students that exist in this course
+        this.students = new UniqueStudentList();
+        this.assessments = new UniqueAssessmentList();
+        this.grades = new UniqueGradeList();
     }
 
-    public String getCourseCode() {
+    public CourseCode getCourseCode() {
         return courseCode;
     }
 
-    public ArrayList<Student> getStudents() {
+    public UniqueStudentList getStudents() {
         return students;
     }
 
-    public ArrayList<Assessment> getAssessments() {
+    public UniqueAssessmentList getAssessments() {
         return assessments;
     }
 
-    public ArrayList<Grade> getGrades() {
+    public UniqueGradeList getGrades() {
         return grades;
+    }
+
+    /**
+     * Removes the student with the given ID and all their grades in this course.
+     * @return true if the student was found and removed
+     */
+    public boolean removeStudent(seedu.address.model.student.StudentId studentId) {
+        Optional<Student> toRemove = students.getByStudentId(studentId);
+        if (toRemove.isEmpty()) {
+            return false;
+        }
+        students.remove(toRemove.get());
+        grades.removeGradesForStudent(studentId);
+        return true;
     }
 
     public boolean isSameCourse(Course otherCourse) {
@@ -50,17 +64,13 @@ public class Course {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Course)) {
-            return false;
-        }
+        if (other == this) return true;
+        if (!(other instanceof Course)) return false;
         Course otherCourse = (Course) other;
         return courseCode.equals(otherCourse.courseCode)
-                && students.equals(otherCourse.students)
-                && assessments.equals(otherCourse.assessments)
-                && grades.equals(otherCourse.grades);
+                && students.asUnmodifiableObservableList().equals(otherCourse.students.asUnmodifiableObservableList())
+                && assessments.asUnmodifiableObservableList().equals(otherCourse.assessments.asUnmodifiableObservableList())
+                && grades.asUnmodifiableObservableList().equals(otherCourse.grades.asUnmodifiableObservableList());
     }
 
     @Override

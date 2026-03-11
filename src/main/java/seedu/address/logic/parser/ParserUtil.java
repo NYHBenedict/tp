@@ -9,10 +9,13 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.course.CourseCode;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.student.StudentId;
+import seedu.address.model.student.StudentName;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -120,5 +123,32 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    public static CourseCode parseCourseCode(String code) throws ParseException {
+        requireNonNull(code);
+        String trimmed = code.trim();
+        if (!CourseCode.isValidCourseCode(trimmed)) {
+            throw new ParseException(CourseCode.MESSAGE_CONSTRAINTS);
+        }
+        return new CourseCode(trimmed);
+    }
+
+    public static StudentId parseStudentId(String id) throws ParseException {
+        requireNonNull(id);
+        String trimmed = id.trim();
+        if (!StudentId.isValidStudentId(trimmed)) {
+            throw new ParseException(StudentId.MESSAGE_CONSTRAINTS);
+        }
+        return new StudentId(trimmed);
+    }
+
+    public static StudentName parseStudentName(String name) throws ParseException {
+        requireNonNull(name);
+        String trimmed = name.trim().replaceAll("\\s+", " ");
+        if (!StudentName.isValidStudentName(trimmed)) {
+            throw new ParseException(StudentName.MESSAGE_CONSTRAINTS);
+        }
+        return new StudentName(trimmed);
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
@@ -8,7 +9,9 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.course.CourseCode;
 import seedu.address.model.person.Person;
+import seedu.address.model.student.Student;
 
 /**
  * API of the Logic component
@@ -47,4 +50,10 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /** Returns the current course code being displayed (e.g. after liststudents), if any. */
+    Optional<CourseCode> getCurrentCourseCode();
+
+    /** Returns the filtered list of students for the current course. */
+    ObservableList<Student> getFilteredStudentList();
 }

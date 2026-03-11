@@ -1,11 +1,14 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.course.CourseCode;
 import seedu.address.model.person.Person;
+import seedu.address.model.student.Student;
 
 /**
  * The API of the Model component.
@@ -84,4 +87,20 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    //=========== Course / Student ================================================================================
+
+    boolean hasCourse(CourseCode code);
+
+    void setCurrentCourseForDisplay(Optional<CourseCode> code);
+
+    Optional<CourseCode> getCurrentCourseForDisplay();
+
+    ObservableList<Student> getFilteredStudentList();
+
+    void addCourse(CourseCode code);
+
+    void addStudentToCourse(CourseCode code, Student student);
+
+    boolean removeStudentFromCourse(CourseCode code, seedu.address.model.student.StudentId studentId);
 }

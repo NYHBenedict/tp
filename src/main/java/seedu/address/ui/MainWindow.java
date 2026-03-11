@@ -32,6 +32,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
+    private StudentListPanel studentListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -111,7 +112,11 @@ public class MainWindow extends UiPart<Stage> {
      */
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+        studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        StackPane listStack = new StackPane();
+        listStack.getChildren().addAll(personListPanel.getRoot(), studentListPanel.getRoot());
+        updateListVisibility();
+        personListPanelPlaceholder.getChildren().add(listStack);
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -168,6 +173,17 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Updates which list is visible: students when a course is selected, persons otherwise.
+     */
+    private void updateListVisibility() {
+        boolean showStudents = logic.getCurrentCourseCode().isPresent();
+        personListPanel.getRoot().setVisible(!showStudents);
+        personListPanel.getRoot().setManaged(!showStudents);
+        studentListPanel.getRoot().setVisible(showStudents);
+        studentListPanel.getRoot().setManaged(showStudents);
+    }
+
+    /**
      * Executes the command and returns the result.
      *
      * @see seedu.address.logic.Logic#execute(String)
@@ -177,6 +193,7 @@ public class MainWindow extends UiPart<Stage> {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+            updateListVisibility();
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
