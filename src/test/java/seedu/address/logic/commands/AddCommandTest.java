@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
@@ -22,6 +23,8 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.assessment.Assessment;
+import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -157,6 +160,48 @@ public class AddCommandTest {
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        // ===== Added to satisfy updated Model interface =====
+
+        @Override
+        public boolean hasAssessment(Assessment assessment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addAssessment(Assessment assessment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void removeAssessment(Assessment assessment) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Assessment> getAssessmentList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public boolean hasGrade(Grade grade) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addGrade(Grade grade) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void removeGrade(Grade grade) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Grade> getGradeList() {
+            return FXCollections.observableArrayList();
+        }
     }
 
     /**
@@ -200,5 +245,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }
