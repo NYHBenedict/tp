@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
@@ -22,6 +23,8 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.assessment.Assessment;
+import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -200,7 +203,8 @@ public class AddCommandTest {
 
         @Override
         public boolean hasCourse(String courseCode) {
-            throw new AssertionError("This method should not be called.");
+        public ObservableList<Assessment> getAssessmentList() {
+            return FXCollections.observableArrayList();
         }
 
         @Override
@@ -223,6 +227,9 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
+        public ObservableList<Grade> getGradeList() {
+            return FXCollections.observableArrayList();
+        }
     }
 
     /**
@@ -266,5 +273,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }

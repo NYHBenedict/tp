@@ -1,13 +1,22 @@
-package seedu.address.model.course;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
-import seedu.address.model.student.Student;
 
 /**
  * Represents a Course in the system.
  * Each course maintains its own roster of enrolled students.
+/**
+ * Represents a course.
+ * @author zow1e
+ */
+package seedu.address.model.course;
+
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
+import seedu.address.model.student.Student;
+import java.util.Objects;
+import java.util.ArrayList;
+
+/**
+ * Represents a course identified by its course code.
  */
 public class Course {
 
@@ -55,14 +64,8 @@ public class Course {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Course)) {
-            return false;
-        }
-        Course otherCourse = (Course) other;
-        return courseCode.equals(otherCourse.courseCode);
+        return other == this
+                || (other instanceof Course && courseCode.equals(((Course) other).courseCode));
     }
 
     @Override
