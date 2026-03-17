@@ -160,4 +160,16 @@ public class ParserUtil {
             throw new ParseException(Score.MESSAGE_CONSTRAINTS);
         }
     }
+
+    public static String parseCourseCode(String courseCode) throws ParseException {
+        requireNonNull(courseCode);
+        String trimmed = courseCode.trim().toUpperCase();
+
+        if (!trimmed.matches("[A-Za-z0-9]{2,10}")) {
+            throw new ParseException("Invalid course code. Example: c/CS2103T");
+        }
+
+        return trimmed;
+    }
+
 }

@@ -144,6 +144,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     public void removeGrade(Grade grade) {
+        requireNonNull(grade);
         grades.remove(grade);
     }
 
