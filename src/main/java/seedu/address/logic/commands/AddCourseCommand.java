@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -14,9 +14,9 @@ public class AddCourseCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a new course.\n"
             + "Parameters: "
-            + PREFIX_COURSE + "COURSE CODE "
+            + PREFIX_COURSE_CODE + "COURSE CODE "
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_COURSE + "CS2103T";
+            + PREFIX_COURSE_CODE + "CS2103T";
 
     public static final String MESSAGE_SUCCESS = "New Course added: ";
     public static final String MESSAGE_DUPLICATE_ASSESSMENT = "This Course already exists.";

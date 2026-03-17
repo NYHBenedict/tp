@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
+import seedu.address.model.course.Course;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.testutil.PersonBuilder;
 
@@ -114,28 +115,28 @@ public class AddressBookTest {
         }
 
         @Override
-        public ObservableList<seedu.address.model.assessment.Assessment> getAssessmentList() {
+        public ObservableList<Assessment> getAssessmentList() {
             return FXCollections.emptyObservableList();
         }
 
         @Override
-        public ObservableList<seedu.address.model.grade.Grade> getGradeList() {
+        public ObservableList<Grade> getGradeList() {
             return FXCollections.emptyObservableList();
         }
 
         @Override
         public ObservableList<Course> getCourseList() {
-            return java.util.Collections.emptyList();
+            return FXCollections.emptyObservableList();
         }
     }
 
-    @Override
-    public ObservableList<Assessment> getAssessmentList() {
-        return assessments;
-    }
+    // @Override
+    // public ObservableList<Assessment> getAssessmentList() {
+    //     return assessments;
+    // }
 
-    @Override
-    public ObservableList<Grade> getGradeList() {
-        return grades;
-    }
+    // @Override
+    // public ObservableList<Grade> getGradeList() {
+    //     return grades;
+    // }
 }

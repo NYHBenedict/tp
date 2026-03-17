@@ -1,8 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -17,11 +17,11 @@ public class RemoveStudentCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes a student from a course roster.\n"
             + "Parameters: "
-            + PREFIX_COURSE + "COURSE_CODE "
-            + PREFIX_ID + "STUDENT_ID\n"
+            + PREFIX_COURSE_CODE + "COURSE_CODE "
+            + PREFIX_STUDENT_ID + "STUDENT_ID\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_COURSE + "CS2103T "
-            + PREFIX_ID + "A0123456X";
+            + PREFIX_COURSE_CODE + "CS2103T "
+            + PREFIX_STUDENT_ID + "A0123456X";
 
     public static final String MESSAGE_SUCCESS = "\u2705 Removed student %s from %s.";
     public static final String MESSAGE_COURSE_NOT_FOUND = "\u274C Course %s not found.";
