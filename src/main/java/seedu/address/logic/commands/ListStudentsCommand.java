@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 
 import java.util.ArrayList;
 
@@ -18,12 +18,12 @@ public class ListStudentsCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Displays all students in a course.\n"
-            + "Parameters: " + PREFIX_COURSE + "COURSE_CODE\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_COURSE + "CS2103T";
+            + "Parameters: " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T";
 
     public static final String MESSAGE_COURSE_NOT_FOUND = "\u274C Course %s not found.";
     public static final String MESSAGE_FORMAT_ERROR = "\u274C Format: " + COMMAND_WORD
-            + " " + PREFIX_COURSE + "COURSE_CODE";
+            + " " + PREFIX_COURSE_CODE + "COURSE_CODE";
     public static final String MESSAGE_EMPTY = "\u2705 No students enrolled in %s.";
 
     private final String courseCode;

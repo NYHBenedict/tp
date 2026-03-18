@@ -2,7 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 
 import seedu.address.logic.commands.AddCourseCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -22,15 +22,15 @@ public class AddCourseParser implements Parser<AddCourseCommand> {
     public AddCourseCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_COURSE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_COURSE_CODE);
 
-        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_COURSE)
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_COURSE_CODE)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     AddCourseCommand.MESSAGE_USAGE));
         }
 
-        String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE).get());
+        String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE_CODE).get());
 
         return new AddCourseCommand(courseCode);
     }

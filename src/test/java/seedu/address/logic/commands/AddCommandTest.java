@@ -26,6 +26,7 @@ import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
+import seedu.address.model.course.Course;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -201,16 +202,6 @@ public class AddCommandTest {
         // }
 
         @Override
-        public boolean hasGrade(seedu.address.model.grade.Grade grade) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void addGrade(seedu.address.model.grade.Grade grade) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void removeGrade(seedu.address.model.grade.Grade grade) {
             throw new AssertionError("This method should not be called.");
         }
@@ -226,18 +217,18 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
-        public ObservableList<Assessment> getAssessmentList() {
+        @Override
+        public void removeCourse(Course course) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Course> getCourseList() {
             return FXCollections.observableArrayList();
         }
 
-        @Override
-        public void addAssessment(Assessment assessment) {
-            // Simulate adding an assessment (no-op in the stub)
-        }
-
-        @Override
-        public void removeAssessment(Assessment assessment) {
-            // Simulate removing an assessment (no-op or conditional logic)
+        public ObservableList<Assessment> getAssessmentList() {
+            return FXCollections.observableArrayList();
         }
 
         @Override

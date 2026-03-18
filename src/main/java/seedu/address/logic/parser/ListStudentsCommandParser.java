@@ -1,6 +1,6 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 
 import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -12,16 +12,16 @@ public class ListStudentsCommandParser implements Parser<ListStudentsCommand> {
 
     @Override
     public ListStudentsCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_COURSE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_COURSE_CODE);
 
-        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_COURSE)
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_COURSE_CODE)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(ListStudentsCommand.MESSAGE_FORMAT_ERROR);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE_CODE);
 
-        String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE).get());
+        String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE_CODE).get());
         return new ListStudentsCommand(courseCode);
     }
 }

@@ -6,13 +6,8 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
 import seedu.address.model.course.CourseList;
-import seedu.address.model.grade.Grade;
-import seedu.address.model.grade.Score;
-import seedu.address.model.person.Person;
-import seedu.address.model.student.StudentId;
 
 
 public class RemoveCourseCommand extends Command {
