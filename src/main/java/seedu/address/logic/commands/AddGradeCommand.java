@@ -5,14 +5,13 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.grade.Grade;
 import seedu.address.model.grade.Score;
-import seedu.address.model.person.Person;
+import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentId;
 
 /**
@@ -61,32 +60,32 @@ public class AddGradeCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        ObservableList<Person> studentList = model.getFilteredPersonList();
-
-        if (studentIndex.getZeroBased() >= studentList.size()) {
-            throw new CommandException(MESSAGE_INVALID_STUDENT_INDEX);
-        }
-
         if (model.getCourse(courseCode).isEmpty()) {
             throw new CommandException(MESSAGE_INVALID_COURSE_CODE);
+        }
+
+        List<Student> courseStudents = model.getCourse(courseCode).get().getStudents();
+
+        if (studentIndex.getZeroBased() >= courseStudents.size()) {
+            throw new CommandException(MESSAGE_INVALID_STUDENT_INDEX);
         }
 
         List<Assessment> courseAssessments = model.getAssessmentList().stream()
                 .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode))
                 .collect(Collectors.toList());
 
-        if (courseAssessments.isEmpty() || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
+        if (assessmentIndex.getZeroBased() >= courseAssessments.size()) {
             throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
         }
 
-        Person student = studentList.get(studentIndex.getZeroBased());
+        Student student = courseStudents.get(studentIndex.getZeroBased());
         Assessment assessment = courseAssessments.get(assessmentIndex.getZeroBased());
 
         if (score.value > assessment.getMaxScore().value) {
             throw new CommandException(MESSAGE_SCORE_EXCEEDS_MAX);
         }
 
-        StudentId studentId = new StudentId(student.getEmail().value);
+        StudentId studentId = new StudentId(student.getStudentId());
         Grade toAdd = new Grade(courseCode, studentId, assessment.getAssessmentName(), score);
 
         if (model.hasGrade(toAdd)) {

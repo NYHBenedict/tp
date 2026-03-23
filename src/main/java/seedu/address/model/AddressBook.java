@@ -141,8 +141,10 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Removes an assessment from the address book and all associated grades.
      */
     public void removeAssessment(Assessment assessment) {
+        requireNonNull(assessment);
         assessments.remove(assessment);
-        grades.removeIf(grade -> grade.getAssessmentName().equals(assessment.getAssessmentName()));
+        grades.removeIf(grade -> grade.getCourseCode().equalsIgnoreCase(assessment.getCourseCode())
+                && grade.getAssessmentName().equals(assessment.getAssessmentName()));
     }
 
     /**
