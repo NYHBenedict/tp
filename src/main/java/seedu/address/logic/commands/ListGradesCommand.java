@@ -26,7 +26,7 @@ public class ListGradesCommand extends Command {
 
     public static final String COMMAND_WORD = "listgrades";
 
-   public static final String MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Lists grades for a course, a course assessment, or a student.\n"
             + "Parameters:\n"
             + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
@@ -37,19 +37,16 @@ public class ListGradesCommand extends Command {
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
             + "  " + COMMAND_WORD + " sid/A0123456X";
 
-    public static final String MESSAGE_COURSE_REQUIRED =
-            "Please specify a course code. Example: listgrades c/CS2103T";
+    public static final String MESSAGE_COURSE_REQUIRED = "Please specify a course code. Example: listgrades c/CS2103T";
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %1$s not found.";
-    public static final String MESSAGE_INVALID_ASSESSMENT_INDEX =
-            "The assessment index provided is invalid.";
+    public static final String MESSAGE_INVALID_ASSESSMENT_INDEX = "The assessment index provided is invalid.";
 
     private final String filterType;
     private final String filterValue1;
-    private final Index assessmentIndex; // Only used for course assessment filter
+    private final Index assessmentIndex;
 
     /**
      * Retrieves the filtered grades based on the filter type.
-     *
      */
     public ListGradesCommand(String filterType, String filterValue1, Index assessmentIndex) {
         this.filterType = filterType;
@@ -96,36 +93,35 @@ public class ListGradesCommand extends Command {
         return new CommandResult(sb.toString().trim());
     }
 
-
     private ObservableList<Grade> getFilteredGrades(Model model) throws CommandException {
         switch (filterType.toLowerCase()) {
-            case "student":
-                return model.getGradesByStudentId(filterValue1);
+        case "student":
+            return model.getGradesByStudentId(filterValue1);
 
-            case "course":
-                return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
+        case "course":
+            return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
 
-            case "courseassessment":
-                List<Assessment> courseAssessments = model.getAssessmentList().stream()
-                        .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(filterValue1))
-                        .collect(Collectors.toList());
+        case "courseassessment":
+            List<Assessment> courseAssessments = model.getAssessmentList().stream()
+                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(filterValue1))
+                .collect(Collectors.toList());
 
-                if (courseAssessments.isEmpty()
-                        || assessmentIndex == null
-                        || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
-                    throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
-                }
+            if (courseAssessments.isEmpty()
+                || assessmentIndex == null
+                || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
+                throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
+            }
 
-                Assessment selectedAssessment = courseAssessments.get(assessmentIndex.getZeroBased());
-                String storedCourseCode = selectedAssessment.getCourseCode();
-                String assessmentName = selectedAssessment.getAssessmentName().toString();
+            Assessment selectedAssessment = courseAssessments.get(assessmentIndex.getZeroBased());
+            String storedCourseCode = selectedAssessment.getCourseCode();
+            String assessmentName = selectedAssessment.getAssessmentName().toString();
 
-                return FXCollections.observableArrayList(
-                        model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
+            return FXCollections.observableArrayList(
+                model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
 
-            default:
-                throw new IllegalArgumentException(
-                        "Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
+        default:
+            throw new IllegalArgumentException(
+                "Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
         }
     }
 
@@ -137,26 +133,23 @@ public class ListGradesCommand extends Command {
                 .collect(Collectors.groupingBy(grade -> grade.getCourseCode().toUpperCase(),
                         Collectors.groupingBy(grade -> grade.getAssessmentName().toString())));
     }
+
     /**
-     * Builds the output for each course, iterating over the assessments
+     * Builds the output for each course, iterating over the assessments.
      */
     private String buildGradesByCourseOutput(String courseCode, Map<String, List<Grade>> assessmentsForCourse,
             ObservableList<Assessment> assessments, Set<String> printedCourses) {
         StringBuilder sb = new StringBuilder();
 
-        // Skip if this course has already been printed
         if (printedCourses.contains(courseCode.toUpperCase())) {
             return "";
         }
 
-        printedCourses.add(courseCode.toUpperCase()); // Mark this course as processed
-
+        printedCourses.add(courseCode.toUpperCase());
         sb.append("\nCourse: ").append(courseCode).append("\n");
 
         int assessmentIndex = 1;
 
-        // Iterate over each assessment in the course, in the same order as
-        // listassessments
         for (Assessment currentAssessment : assessments) {
             if (!currentAssessment.getCourseCode().equalsIgnoreCase(courseCode)) {
                 continue;
