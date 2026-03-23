@@ -13,11 +13,11 @@ public class Assessment {
     private final MaxScore maxScore;
 
     /**
-     * Constructs an Assessment with the given course code, assessment name, and max score.
-     *
-     * @param courseCode the course code
+     * Constructs an Assessment with the given course code, assessment name, and max
+     * score.
+     * @param courseCode     the course code
      * @param assessmentName the assessment name
-     * @param maxScore the maximum score
+     * @param maxScore       the maximum score
      */
     public Assessment(String courseCode, AssessmentName assessmentName, MaxScore maxScore) {
         requireNonNull(courseCode);
@@ -38,7 +38,6 @@ public class Assessment {
 
     /**
      * Returns the maximum score for this assessment.
-     *
      * @return the maximum score
      */
     public MaxScore getMaxScore() {
@@ -46,8 +45,8 @@ public class Assessment {
     }
 
     /**
-     * Returns true if the given assessment has the same identity as this assessment.
-     *
+     * Returns true if the given assessment has the same identity as this
+     * assessment.
      * @param otherAssessment the other assessment to compare
      * @return true if same assessment, false otherwise
      */
@@ -62,7 +61,7 @@ public class Assessment {
 
     @Override
     public String toString() {
-        return courseCode + " : " + assessmentName + " (Max Score: " + maxScore + ")";
+        return "Assessment Name: " + assessmentName + " (Max Score: " + maxScore + ") in " + courseCode;
     }
 
     @Override
