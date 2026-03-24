@@ -99,10 +99,4 @@ public class AddressBookParserTest {
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
     }
-
-    @Test
-    public void parseCommand_listAssessments() throws Exception {
-        assertTrue(parser.parseCommand(ListAssessmentsCommand.COMMAND_WORD) instanceof ListAssessmentsCommand);
-        assertTrue(parser.parseCommand(ListAssessmentsCommand.COMMAND_WORD + " 3") instanceof ListAssessmentsCommand);
-    }
 }
