@@ -66,8 +66,8 @@ public class AddAssessmentCommandTest {
         ModelStub modelStub = new ModelStubWithoutCourse();
 
         assertThrows(CommandException.class,
-                String.format(AddAssessmentCommand.MESSAGE_COURSE_NOT_FOUND, "CS2103T"),
-                () -> command.execute(modelStub));
+                String.format(AddAssessmentCommand.MESSAGE_COURSE_NOT_FOUND, "CS2103T"), (
+                ) -> command.execute(modelStub));
     }
 
     @Test
@@ -79,8 +79,8 @@ public class AddAssessmentCommandTest {
         ModelStub modelStub = new ModelStubWithAssessment(assessment);
 
         assertThrows(CommandException.class,
-                AddAssessmentCommand.MESSAGE_DUPLICATE_ASSESSMENT,
-                () -> command.execute(modelStub));
+                AddAssessmentCommand.MESSAGE_DUPLICATE_ASSESSMENT, (
+                ) -> command.execute(modelStub));
     }
 
     @Test
