@@ -69,8 +69,8 @@ public class RemoveAssessmentCommandTest {
         ModelStub modelStub = new ModelStub(assessments);
         RemoveAssessmentCommand command = new RemoveAssessmentCommand("CS9999", Index.fromOneBased(1));
 
-        assertThrows(CommandException.class, RemoveAssessmentCommand.MESSAGE_INVALID_COURSE, (    
-                ) -> command.execute(modelStub));
+        assertThrows(CommandException.class, RemoveAssessmentCommand.MESSAGE_INVALID_COURSE, (
+            ) -> command.execute(modelStub));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class RemoveAssessmentCommandTest {
         RemoveAssessmentCommand command = new RemoveAssessmentCommand("CS2103T", Index.fromOneBased(2));
 
         assertThrows(CommandException.class, RemoveAssessmentCommand.MESSAGE_INVALID_ASSESSMENT_INDEX, (
-                ) -> command.execute(modelStub));
+            ) -> command.execute(modelStub));
     }
 
     @Test
