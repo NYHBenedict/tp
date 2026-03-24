@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import org.junit.jupiter.api.Test;
@@ -21,12 +23,14 @@ public class ListAssessmentsCommandParserTest {
     }
 
     @Test
-    public void parse_anyArgs_success() {
-        assertParseSuccess(parser, "some random text", new ListAssessmentsCommand());
+    public void parse_nonEmptyArgs_failure() {
+        assertParseFailure(parser, "abc",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListAssessmentsCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_multipleWords_success() {
-        assertParseSuccess(parser, "extra arguments here", new ListAssessmentsCommand());
+    public void parse_multipleWords_failure() {
+        assertParseFailure(parser, "extra arguments here",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListAssessmentsCommand.MESSAGE_USAGE));
     }
 }
