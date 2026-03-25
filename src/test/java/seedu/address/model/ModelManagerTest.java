@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
 
@@ -94,6 +95,27 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void getFilteredAssessmentList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredAssessmentList().remove(0));
+    }
+
+    @Test
+    public void getFilteredGradeList_modifyList_throwsUnsupportedOperationException() {
+        assertThrows(UnsupportedOperationException.class, () -> modelManager.getFilteredGradeList().remove(0));
+    }
+
+    @Test
+    public void displayMode_defaultIsPersons() {
+        assertEquals(DisplayMode.PERSONS, modelManager.getDisplayMode());
+    }
+
+    @Test
+    public void setDisplayMode_validDisplayMode_setsDisplayMode() {
+        modelManager.setDisplayMode(DisplayMode.ASSESSMENTS);
+        assertEquals(DisplayMode.ASSESSMENTS, modelManager.getDisplayMode());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
@@ -128,5 +150,12 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
+
+        // different display mode -> returns false
+        modelManager.setDisplayMode(DisplayMode.ASSESSMENTS);
+        assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
+
+        // resets modelManager to initial state for upcoming tests
+        modelManager.setDisplayMode(DisplayMode.PERSONS);
     }
 }

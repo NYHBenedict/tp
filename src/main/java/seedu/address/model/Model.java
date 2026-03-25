@@ -143,4 +143,19 @@ public interface Model {
 
     /** Returns the course code currently being displayed, or empty if showing persons. */
     Optional<String> getCurrentCourseForDisplay();
+
+    // =========== Assessment / Grade GUI display state
+    // ========================================
+
+    /** Returns an unmodifiable view of the filtered assessment list. */
+    ObservableList<Assessment> getFilteredAssessmentList();
+
+    /** Returns an unmodifiable view of the filtered grade list. */
+    ObservableList<Grade> getFilteredGradeList();
+
+    /** Sets which main list should be shown in the GUI. */
+    void setDisplayMode(DisplayMode displayMode);
+
+    /** Returns which main list should currently be shown in the GUI. */
+    DisplayMode getDisplayMode();
 }

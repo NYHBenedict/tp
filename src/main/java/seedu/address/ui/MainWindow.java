@@ -17,6 +17,7 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.DisplayMode;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -36,6 +37,8 @@ public class MainWindow extends UiPart<Stage> {
     private StudentListPanel studentListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private AssessmentListPanel assessmentListPanel;
+    // private GradeListPanel gradeListPanel;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -114,13 +117,27 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        assessmentListPanel = new AssessmentListPanel(logic.getFilteredAssessmentList());
+        // gradeListPanel = new GradeListPanel(logic.getFilteredGradeList());
 
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
-        personListPanelPlaceholder.getChildren().add(studentListPanel.getRoot());
+        personListPanelPlaceholder.getChildren().setAll(
+                personListPanel.getRoot(),
+                studentListPanel.getRoot(),
+                assessmentListPanel.getRoot()
+                // gradeListPanel.getRoot()
+        );
 
-        // default to person list
+        personListPanel.getRoot().setVisible(true);
+        personListPanel.getRoot().setManaged(true);
+
         studentListPanel.getRoot().setVisible(false);
         studentListPanel.getRoot().setManaged(false);
+
+        assessmentListPanel.getRoot().setVisible(false);
+        assessmentListPanel.getRoot().setManaged(false);
+
+        // gradeListPanel.getRoot().setVisible(false);
+        // gradeListPanel.getRoot().setManaged(false);
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -130,18 +147,31 @@ public class MainWindow extends UiPart<Stage> {
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+
+        updateListVisibility();
     }
 
     private void updateListVisibility() {
+        DisplayMode displayMode = logic.getDisplayMode();
         Optional<String> currentCourse = logic.getCurrentCourseForDisplay();
-        boolean showStudents = currentCourse.isPresent();
 
-        personListPanel.getRoot().setVisible(!showStudents);
-        personListPanel.getRoot().setManaged(!showStudents);
+        boolean showPersons = displayMode == DisplayMode.PERSONS;
+        boolean showStudents = displayMode == DisplayMode.STUDENTS;
+        boolean showAssessments = displayMode == DisplayMode.ASSESSMENTS;
+        // boolean showGrades = displayMode == DisplayMode.GRADES;
+
+        personListPanel.getRoot().setVisible(showPersons);
+        personListPanel.getRoot().setManaged(showPersons);
 
         studentListPanel.setCourseHeader(currentCourse.orElse(""));
         studentListPanel.getRoot().setVisible(showStudents);
         studentListPanel.getRoot().setManaged(showStudents);
+
+        assessmentListPanel.getRoot().setVisible(showAssessments);
+        assessmentListPanel.getRoot().setManaged(showAssessments);
+
+        // gradeListPanel.getRoot().setVisible(showGrades);
+        // gradeListPanel.getRoot().setManaged(showGrades);
     }
 
     /**

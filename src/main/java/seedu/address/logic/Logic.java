@@ -9,6 +9,9 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.DisplayMode;
+import seedu.address.model.assessment.Assessment;
+import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
 import seedu.address.model.student.Student;
 
@@ -55,4 +58,13 @@ public interface Logic {
     ObservableList<Student> getFilteredStudentList();
 
     Optional<String> getCurrentCourseForDisplay();
+    
+    // =========== Assessment / Grade GUI display state
+    // ========================================
+
+    ObservableList<Assessment> getFilteredAssessmentList();
+
+    ObservableList<Grade> getFilteredGradeList();
+
+    DisplayMode getDisplayMode();
 }
