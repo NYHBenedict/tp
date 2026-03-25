@@ -59,41 +59,23 @@ public class ListAssessmentsCommandTest {
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
         assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
-        assertEquals( DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
+        assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
         assertEquals(assessments, modelStub.getFilteredAssessmentList());
     }
 
     /**
      * A default model stub that only supports getAssessmentList().
      */
+    /**
+     * A default model stub that only supports the methods used by
+     * ListAssessmentsCommand.
+     */
     private static class ModelStub implements Model {
         private final ObservableList<Assessment> assessments;
-        private final ObservableList<Assessment> filteredAssessments = FXCollections.observableArrayList();
         private DisplayMode displayMode;
 
         private ModelStub(ObservableList<Assessment> assessments) {
             this.assessments = assessments;
-            this.filteredAssessments.setAll(assessments);
-        }
-
-        @Override
-        public ObservableList<Assessment> getAssessmentList() {
-            return assessments;
-        }
-
-        @Override
-        public ObservableList<Assessment> getFilteredAssessmentList() {
-            return filteredAssessments;
-        }
-
-        @Override
-        public void setDisplayMode(DisplayMode displayMode) {
-            this.displayMode = displayMode;
-        }
-
-        @Override
-        public DisplayMode getDisplayMode() {
-            return displayMode;
         }
 
         @Override
@@ -179,6 +161,16 @@ public class ListAssessmentsCommandTest {
         @Override
         public void removeAssessment(Assessment assessment) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Assessment> getAssessmentList() {
+            return assessments;
+        }
+
+        @Override
+        public ObservableList<Assessment> getFilteredAssessmentList() {
+            return assessments;
         }
 
         @Override
@@ -269,6 +261,16 @@ public class ListAssessmentsCommandTest {
         @Override
         public ObservableList<Grade> getFilteredGradeList() {
             return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public void setDisplayMode(DisplayMode displayMode) {
+            this.displayMode = displayMode;
+        }
+
+        @Override
+        public DisplayMode getDisplayMode() {
+            return displayMode;
         }
 
         @Override
