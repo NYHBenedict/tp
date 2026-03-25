@@ -54,7 +54,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `addgrade c/CS2103T id/A0123456B a/Assignment1 s/95` to record a student's grade for an assessment.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
