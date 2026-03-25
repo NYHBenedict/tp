@@ -32,8 +32,7 @@ public class ListAssessmentsCommand extends Command {
 
         model.setCurrentCourseForDisplay(Optional.empty());
         model.setDisplayMode(DisplayMode.ASSESSMENTS);
-
-        return new CommandResult("Displayed all assessments.");
+        return new CommandResult(MESSAGE_SUCCESS);
     }
 
     @Override
