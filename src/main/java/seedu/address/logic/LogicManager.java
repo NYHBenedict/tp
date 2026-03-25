@@ -15,8 +15,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
-import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.DisplayMode;
+import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
@@ -96,7 +96,7 @@ public class LogicManager implements Logic {
         return model.getFilteredStudentList();
     }
 
-        @Override
+    @Override
     public Optional<String> getCurrentCourseForDisplay() {
         return model.getCurrentCourseForDisplay();
     }

@@ -6,6 +6,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.assessment.Assessment;
 
+/**
+ * A UI component that displays information for a single {@code Assessment}.
+ */
 public class AssessmentCard extends UiPart<Region> {
 
     private static final String FXML = "AssessmentListCard.fxml";
@@ -23,6 +26,13 @@ public class AssessmentCard extends UiPart<Region> {
     @FXML
     private Label maxScore;
 
+    /**
+     * Creates an {@code AssessmentCard} for the given {@code Assessment} and
+     * displays it
+     * using the given displayed index.
+     * @param assessment     The assessment to display.
+     * @param displayedIndex The index shown for this assessment in the list.
+     */
     public AssessmentCard(Assessment assessment, int displayedIndex) {
         super(FXML);
         this.assessment = assessment;

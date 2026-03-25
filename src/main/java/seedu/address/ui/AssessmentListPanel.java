@@ -7,6 +7,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.address.model.assessment.Assessment;
 
+/**
+ * Panel containing the list of assessments to be displayed in the UI.
+ */
 public class AssessmentListPanel extends UiPart<Region> {
 
     private static final String FXML = "AssessmentListPanel.fxml";
@@ -14,6 +17,11 @@ public class AssessmentListPanel extends UiPart<Region> {
     @FXML
     private ListView<Assessment> assessmentListView;
 
+    /**
+     * Creates an {@code AssessmentListPanel} that displays the given list of
+     * assessments.
+     * @param assessmentList The list of assessments to display.
+     */
     public AssessmentListPanel(ObservableList<Assessment> assessmentList) {
         super(FXML);
         assessmentListView.setItems(assessmentList);
