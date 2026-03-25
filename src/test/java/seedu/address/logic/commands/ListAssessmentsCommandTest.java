@@ -66,10 +66,6 @@ public class ListAssessmentsCommandTest {
     /**
      * A default model stub that only supports getAssessmentList().
      */
-    /**
-     * A default model stub that only supports the methods used by
-     * ListAssessmentsCommand.
-     */
     private static class ModelStub implements Model {
         private final ObservableList<Assessment> assessments;
         private DisplayMode displayMode;
