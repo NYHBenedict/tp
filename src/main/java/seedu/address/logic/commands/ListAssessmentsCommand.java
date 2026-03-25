@@ -18,6 +18,7 @@ public class ListAssessmentsCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Lists all assessments grouped by course.\n"
             + "Example: " + COMMAND_WORD;
+    public static final String MESSAGE_SUCCESS = "Listed all assessments";
 
     @Override
     public CommandResult execute(Model model) {

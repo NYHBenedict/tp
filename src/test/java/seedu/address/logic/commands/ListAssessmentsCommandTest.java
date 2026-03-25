@@ -25,6 +25,8 @@ import seedu.address.model.student.Student;
 
 public class ListAssessmentsCommandTest {
 
+    public static final String MESSAGE_SUCCESS = "Listed all assessments";
+
     @Test
     public void execute_noAssessments_returnsNoAssessmentsMessage() {
         ModelStub modelStub = new ModelStub(FXCollections.observableArrayList());
@@ -43,28 +45,23 @@ public class ListAssessmentsCommandTest {
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        String expected = "Assessments:\n"
-                + "\nCourse: CS2103T (Index: 1)\n"
-                + "    1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T\n"
-                + "    2. Assessment Name: Finals (Max Score: 100) in CS2103T";
-        assertEquals(expected, result.getFeedbackToUser());
+        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
+        assertEquals(assessments, modelStub.getFilteredAssessmentList());
     }
 
     @Test
     public void execute_multipleCourses_outputContainsAllCourseSections() {
         ObservableList<Assessment> assessments = FXCollections.observableArrayList(
                 new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")),
-                new Assessment("CS2101", new AssessmentName("Participation"), new MaxScore("20")));
+                new Assessment("CS2101", new AssessmentName("OPM"), new MaxScore("20")));
         ModelStub modelStub = new ModelStub(assessments);
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        String feedback = result.getFeedbackToUser();
-        assertTrue(feedback.startsWith("Assessments:"));
-        assertTrue(feedback.contains("Course: CS2103T (Index:"));
-        assertTrue(feedback.contains("1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T"));
-        assertTrue(feedback.contains("Course: CS2101 (Index:"));
-        assertTrue(feedback.contains("1. Assessment Name: Participation (Max Score: 20) in CS2101"));
+        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
+        assertEquals(assessments, modelStub.getFilteredAssessmentList());
     }
 
     /**
