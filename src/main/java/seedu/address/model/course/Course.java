@@ -31,7 +31,7 @@ public class Course {
      */
     public Course(String courseCode) {
         this.courseCode = courseCode.trim().toUpperCase();
-        this.students = new ArrayList<>();
+        this.students = new ArrayList<Student>();
         this.assessments = new UniqueAssessmentList();
     }
 
