@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
@@ -40,23 +41,41 @@ public class ListGradesCommandTest {
                 new Assessment("CS2103T", new AssessmentName("Finals"), new MaxScore("100")),
                 new Assessment("CS2101", new AssessmentName("Presentation"), new MaxScore("20")));
 
-        modelStub.gradesByStudentId = FXCollections.observableArrayList(
+        ObservableList<Grade> expectedGrades = FXCollections.observableArrayList(
                 new Grade("CS2103T", new StudentId("A1234567X"), new AssessmentName("Quiz 1"), new Score("9")),
                 new Grade("CS2101", new StudentId("A1234567X"), new AssessmentName("Presentation"), new Score("18")));
+        modelStub.gradesByStudentId = expectedGrades;
+        modelStub.allGrades = FXCollections.observableArrayList(expectedGrades);
 
         ListGradesCommand command = new ListGradesCommand("student", "A1234567X", null);
         CommandResult result = command.execute(modelStub);
 
-        String expected = "Grades:\n"
-                + "\nCourse: CS2103T\n"
-                + "  Assessment: Quiz 1 (Max Score: 10) (Index: 1)\n"
-                + "1.    Student ID: A1234567X, Grade: 9\n"
-                + "\n"
-                + "\nCourse: CS2101\n"
-                + "  Assessment: Presentation (Max Score: 20) (Index: 1)\n"
-                + "1.    Student ID: A1234567X, Grade: 18";
+        assertEquals(ListGradesCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.GRADES, modelStub.getDisplayMode());
+        assertEquals(expectedGrades, modelStub.getFilteredGradeList());
+    }
 
-        assertEquals(expected, result.getFeedbackToUser());
+    @Test
+    public void executeCourseAssessment_success() throws Exception {
+        ModelStub modelStub = new ModelStub();
+        modelStub.hasCourse = true;
+        modelStub.assessments = FXCollections.observableArrayList(
+                new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")),
+                new Assessment("CS2103T", new AssessmentName("Finals"), new MaxScore("100")));
+
+        ObservableList<Grade> expectedGrades = FXCollections.observableArrayList(
+                new Grade("CS2103T", new StudentId("A1234567X"), new AssessmentName("Finals"), new Score("87")),
+                new Grade("CS2103T", new StudentId("A7654321B"), new AssessmentName("Finals"), new Score("92")));
+        modelStub.gradesByCourseAndAssessment = expectedGrades;
+        modelStub.allGrades = FXCollections.observableArrayList(expectedGrades);
+
+        ListGradesCommand command = new ListGradesCommand("courseassessment",
+                "CS2103T", Index.fromOneBased(2));
+        CommandResult result = command.execute(modelStub);
+
+        assertEquals(ListGradesCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.GRADES, modelStub.getDisplayMode());
+        assertEquals(expectedGrades, modelStub.getFilteredGradeList());
     }
 
     @Test
@@ -99,30 +118,6 @@ public class ListGradesCommandTest {
     }
 
     @Test
-    public void executeCourseAssessment_success() throws Exception {
-        ModelStub modelStub = new ModelStub();
-        modelStub.hasCourse = true;
-        modelStub.assessments = FXCollections.observableArrayList(
-                new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")),
-                new Assessment("CS2103T", new AssessmentName("Finals"), new MaxScore("100")));
-        modelStub.gradesByCourseAndAssessment = FXCollections.observableArrayList(
-                new Grade("CS2103T", new StudentId("A1234567X"), new AssessmentName("Finals"), new Score("87")),
-                new Grade("CS2103T", new StudentId("A7654321B"), new AssessmentName("Finals"), new Score("92")));
-
-        ListGradesCommand command = new ListGradesCommand("courseassessment",
-                "CS2103T", Index.fromOneBased(2));
-        CommandResult result = command.execute(modelStub);
-
-        String expected = "Grades:\n"
-                + "\nCourse: CS2103T\n"
-                + "  Assessment: Finals (Max Score: 100) (Index: 2)\n"
-                + "1.    Student ID: A1234567X, Grade: 87\n"
-                + "2.    Student ID: A7654321B, Grade: 92";
-
-        assertEquals(expected, result.getFeedbackToUser());
-    }
-
-    @Test
     public void equals() {
         ListGradesCommand firstCommand = new ListGradesCommand("course", "CS2103T", null);
         ListGradesCommand firstCommandCopy = new ListGradesCommand("course", "CS2103T", null);
@@ -146,6 +141,10 @@ public class ListGradesCommandTest {
         private ObservableList<Grade> gradesByStudentId = FXCollections.observableArrayList();
         private ObservableList<Grade> gradesByCourse = FXCollections.observableArrayList();
         private ObservableList<Grade> gradesByCourseAndAssessment = FXCollections.observableArrayList();
+        private ObservableList<Grade> allGrades = FXCollections.observableArrayList();
+        private ObservableList<Grade> filteredGrades = FXCollections.observableArrayList();
+        private DisplayMode displayMode;
+        private Optional<String> currentCourseForDisplay = Optional.empty();
 
         @Override
         public boolean hasCourse(String courseCode) {
@@ -161,12 +160,14 @@ public class ListGradesCommandTest {
         @Override
         public ObservableList<Grade> getGradesByStudentId(String studentId) {
             requireNonNull(studentId);
+            filteredGrades.setAll(gradesByStudentId);
             return gradesByStudentId;
         }
 
         @Override
         public ObservableList<Grade> getGradesByCourse(String courseCode) {
             requireNonNull(courseCode);
+            filteredGrades.setAll(gradesByCourse);
             return gradesByCourse;
         }
 
@@ -174,7 +175,43 @@ public class ListGradesCommandTest {
         public ObservableList<Grade> getGradesByCourseAndAssessment(String courseCode, String assessmentName) {
             requireNonNull(courseCode);
             requireNonNull(assessmentName);
+            filteredGrades.setAll(gradesByCourseAndAssessment);
             return gradesByCourseAndAssessment;
+        }
+
+        @Override
+        public ObservableList<Grade> getGradeList() {
+            return allGrades;
+        }
+
+        @Override
+        public ObservableList<Grade> getFilteredGradeList() {
+            return filteredGrades;
+        }
+
+        @Override
+        public void updateFilteredGradeList(Predicate<Grade> predicate) {
+            filteredGrades.setAll(allGrades.stream().filter(predicate).toList());
+        }
+
+        @Override
+        public void setDisplayMode(DisplayMode displayMode) {
+            this.displayMode = displayMode;
+        }
+
+        @Override
+        public DisplayMode getDisplayMode() {
+            return displayMode;
+        }
+
+        @Override
+        public void setCurrentCourseForDisplay(Optional<String> courseCode) {
+            currentCourseForDisplay = courseCode;
+        }
+
+        @Override
+        public Optional<String> getCurrentCourseForDisplay() {
+            return currentCourseForDisplay;
         }
 
         @Override
@@ -278,11 +315,6 @@ public class ListGradesCommandTest {
         }
 
         @Override
-        public ObservableList<Grade> getGradeList() {
-            return FXCollections.observableArrayList();
-        }
-
-        @Override
         public ObservableList<Course> getCourseList() {
             return FXCollections.observableArrayList();
         }
@@ -318,13 +350,8 @@ public class ListGradesCommandTest {
         }
 
         @Override
-        public void setCurrentCourseForDisplay(Optional<String> courseCode) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public Optional<String> getCurrentCourseForDisplay() {
-            throw new AssertionError("This method should not be called.");
+        public ObservableList<Assessment> getFilteredAssessmentList() {
+            return FXCollections.observableArrayList();
         }
     }
 }

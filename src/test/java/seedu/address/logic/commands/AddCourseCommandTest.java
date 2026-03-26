@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
@@ -267,6 +268,31 @@ public class AddCourseCommandTest {
 
         @Override
         public java.util.Optional<String> getCurrentCourseForDisplay() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Assessment> getFilteredAssessmentList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<Grade> getFilteredGradeList() {
+            return FXCollections.observableArrayList();
+        }
+
+        @Override
+        public void setDisplayMode(DisplayMode displayMode) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public DisplayMode getDisplayMode() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredGradeList(Predicate<Grade> predicate) {
             throw new AssertionError("This method should not be called.");
         }
     }

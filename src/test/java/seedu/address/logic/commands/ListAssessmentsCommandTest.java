@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
@@ -23,6 +23,8 @@ import seedu.address.model.person.Person;
 import seedu.address.model.student.Student;
 
 public class ListAssessmentsCommandTest {
+
+    public static final String MESSAGE_SUCCESS = "Listed all assessments";
 
     @Test
     public void execute_noAssessments_returnsNoAssessmentsMessage() {
@@ -42,28 +44,23 @@ public class ListAssessmentsCommandTest {
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        String expected = "Assessments:\n"
-                + "\nCourse: CS2103T (Index: 1)\n"
-                + "    1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T\n"
-                + "    2. Assessment Name: Finals (Max Score: 100) in CS2103T";
-        assertEquals(expected, result.getFeedbackToUser());
+        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
+        assertEquals(assessments, modelStub.getFilteredAssessmentList());
     }
 
     @Test
     public void execute_multipleCourses_outputContainsAllCourseSections() {
         ObservableList<Assessment> assessments = FXCollections.observableArrayList(
                 new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")),
-                new Assessment("CS2101", new AssessmentName("Participation"), new MaxScore("20")));
+                new Assessment("CS2101", new AssessmentName("OPM"), new MaxScore("20")));
         ModelStub modelStub = new ModelStub(assessments);
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        String feedback = result.getFeedbackToUser();
-        assertTrue(feedback.startsWith("Assessments:"));
-        assertTrue(feedback.contains("Course: CS2103T (Index:"));
-        assertTrue(feedback.contains("1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T"));
-        assertTrue(feedback.contains("Course: CS2101 (Index:"));
-        assertTrue(feedback.contains("1. Assessment Name: Participation (Max Score: 20) in CS2101"));
+        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
+        assertEquals(assessments, modelStub.getFilteredAssessmentList());
     }
 
     /**
@@ -71,9 +68,42 @@ public class ListAssessmentsCommandTest {
      */
     private static class ModelStub implements Model {
         private final ObservableList<Assessment> assessments;
+        private DisplayMode displayMode;
+
+        private java.util.Optional<String> currentCourseForDisplay = java.util.Optional.empty();
 
         private ModelStub(ObservableList<Assessment> assessments) {
             this.assessments = assessments;
+        }
+
+        @Override
+        public ObservableList<Assessment> getAssessmentList() {
+            return assessments;
+        }
+
+        @Override
+        public ObservableList<Assessment> getFilteredAssessmentList() {
+            return assessments;
+        }
+
+        @Override
+        public void setDisplayMode(DisplayMode displayMode) {
+            this.displayMode = displayMode;
+        }
+
+        @Override
+        public DisplayMode getDisplayMode() {
+            return displayMode;
+        }
+
+        @Override
+        public void setCurrentCourseForDisplay(java.util.Optional<String> courseCode) {
+            this.currentCourseForDisplay = courseCode;
+        }
+
+        @Override
+        public java.util.Optional<String> getCurrentCourseForDisplay() {
+            return currentCourseForDisplay;
         }
 
         @Override
@@ -162,11 +192,6 @@ public class ListAssessmentsCommandTest {
         }
 
         @Override
-        public ObservableList<Assessment> getAssessmentList() {
-            return assessments;
-        }
-
-        @Override
         public boolean hasGrade(Grade grade) {
             throw new AssertionError("This method should not be called.");
         }
@@ -242,12 +267,12 @@ public class ListAssessmentsCommandTest {
         }
 
         @Override
-        public void setCurrentCourseForDisplay(java.util.Optional<String> courseCode) {
-            throw new AssertionError("This method should not be called.");
+        public ObservableList<Grade> getFilteredGradeList() {
+            return FXCollections.observableArrayList();
         }
 
         @Override
-        public java.util.Optional<String> getCurrentCourseForDisplay() {
+        public void updateFilteredGradeList(Predicate<Grade> predicate) {
             throw new AssertionError("This method should not be called.");
         }
     }

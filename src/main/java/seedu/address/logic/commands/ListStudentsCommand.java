@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 import java.util.Optional;
 
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 
 /**
@@ -52,6 +53,7 @@ public class ListStudentsCommand extends Command {
         }
 
         model.setCurrentCourseForDisplay(Optional.of(courseCode));
+        model.setDisplayMode(DisplayMode.STUDENTS);
         return new CommandResult(String.format(MESSAGE_SUCCESS, courseCode));
     }
 

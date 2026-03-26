@@ -5,6 +5,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Optional;
 
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 
 /**
@@ -22,6 +23,7 @@ public class ListCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.setCurrentCourseForDisplay(Optional.empty());
+        model.setDisplayMode(DisplayMode.PERSONS);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

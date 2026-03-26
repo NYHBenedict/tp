@@ -30,11 +30,14 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final FilteredList<Assessment> filteredAssessments;
+    private final FilteredList<Grade> filteredGrades;
 
     private ObservableList<Course> courses;
     private ObservableList<Grade> grades;
 
     // Student GUI display state
+    private DisplayMode displayMode = DisplayMode.PERSONS;
     private Optional<String> currentCourseForDisplay = Optional.empty();
     private final ObservableList<Student> filteredStudents = FXCollections.observableArrayList();
 
@@ -49,6 +52,8 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredAssessments = new FilteredList<>(this.addressBook.getAssessmentList());
+        filteredGrades = new FilteredList<>(this.addressBook.getGradeList());
         this.courses = this.addressBook.getCourseList();
     }
 
@@ -215,6 +220,12 @@ public class ModelManager implements Model {
         return addressBook.getGradeList();
     }
 
+    @Override
+    public void updateFilteredGradeList(Predicate<Grade> predicate) {
+        requireNonNull(predicate);
+        filteredGrades.setPredicate(predicate);
+    }
+
     // =========== Course / Student operations
     // =============================================================
 
@@ -287,6 +298,27 @@ public class ModelManager implements Model {
         return currentCourseForDisplay;
     }
 
+    @Override
+    public ObservableList<Assessment> getFilteredAssessmentList() {
+        return filteredAssessments;
+    }
+
+    @Override
+    public ObservableList<Grade> getFilteredGradeList() {
+        return filteredGrades;
+    }
+
+    @Override
+    public void setDisplayMode(DisplayMode displayMode) {
+        requireNonNull(displayMode);
+        this.displayMode = displayMode;
+    }
+
+    @Override
+    public DisplayMode getDisplayMode() {
+        return displayMode;
+    }
+
     private void refreshFilteredStudents() {
         if (currentCourseForDisplay.isEmpty()) {
             filteredStudents.clear();
@@ -335,7 +367,10 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && filteredAssessments.equals(otherModelManager.filteredAssessments)
+                && filteredGrades.equals(otherModelManager.filteredGrades)
+                && displayMode.equals(otherModelManager.displayMode)
+                && currentCourseForDisplay.equals(otherModelManager.currentCourseForDisplay);
     }
-
 }
