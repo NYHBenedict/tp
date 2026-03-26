@@ -19,7 +19,7 @@ public class AddCourseCommand extends Command {
 
     public static final String MESSAGE_FORMAT = "\u274C Format: " + COMMAND_WORD + " COURSE_CODE ";
 
-    public static final String MESSAGE_SUCCESS = "New Course added: ";
+    public static final String MESSAGE_SUCCESS = "New Course added: %s";
     public static final String MESSAGE_DUPLICATE_ASSESSMENT = "This Course already exists.";
 
     private final String toAdd;

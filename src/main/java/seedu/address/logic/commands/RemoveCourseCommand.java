@@ -18,7 +18,7 @@ public class RemoveCourseCommand extends Command {
             + "Parameters: COURSE_CODE \n"
             + "Example: " + COMMAND_WORD + " CS2102 ";
 
-    public static final String MESSAGE_SUCCESS = "Removed course: ";
+    public static final String MESSAGE_SUCCESS = "Removed course: %s";
     public static final String MESSAGE_COURSE_NOT_FOUND = "This course does not exist in the system.";
 
     private final String courseCode;

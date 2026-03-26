@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -29,25 +31,29 @@ public class AddCourseCommandParserTest {
 
     @Test
     public void parse_multipleCourseCodeValues_failure() {
-        String input = "CS2103T CS2101";
-        assertParseFailure(parser, input, Messages.MESSAGE_INVALID_COMMAND_FORMAT + AddCourseCommand.MESSAGE_USAGE);
+        // Multiple course code values should fail (only one expected)
+        String input = " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_COURSE_CODE + "CS2101";
+        assertParseFailure(parser, input, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_COURSE_CODE));
     }
 
     @Test
-    public void parse_missingCourseCode_failure() {
-        assertParseFailure(parser, "", Messages.MESSAGE_INVALID_COMMAND_FORMAT + AddCourseCommand.MESSAGE_USAGE);
+    public void parse_missingCourseCodePrefix_failure() {
+        String invalidInput = "CS2103T";
+        assertParseFailure(parser, invalidInput, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                    AddCourseCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_invalidCourseCode_failure() {
-        String invalidCourseCode = "@@@";
-        assertParseFailure(parser, invalidCourseCode, Messages.MESSAGE_INVALID_COMMAND_FORMAT
-            + AddCourseCommand.MESSAGE_USAGE);
+    public void parse_nonEmptyPreamble_failure() {
+        String invalidInput = "extra " + PREFIX_COURSE_CODE + "CS2103T";
+        assertParseFailure(parser, invalidInput, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                    AddCourseCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_emptyInput_failure() {
-        assertParseFailure(parser, "", Messages.MESSAGE_INVALID_COMMAND_FORMAT + AddCourseCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                                    AddCourseCommand.MESSAGE_USAGE));
     }
 
     @Test
