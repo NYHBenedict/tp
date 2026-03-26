@@ -16,12 +16,12 @@ import seedu.address.model.grade.Grade;
  */
 public class ViewAllCommand extends Command {
 
-    private static final Logger logger = LogsCenter.getLogger(ViewAllCommand.class);
-
     public static final String COMMAND_WORD = "viewall";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Shows an overview summary of all assessments and grades.\n"
             + "Example: " + COMMAND_WORD;
+
+    private static final Logger logger = LogsCenter.getLogger(ViewAllCommand.class);
 
     @Override
     public CommandResult execute(Model model) {
