@@ -161,17 +161,6 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void filterAssessmentListByCourse(String courseCode) {
-        requireNonNull(courseCode);
-        updateFilteredAssessmentList(assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode.trim()));
-    }
-
-    @Override
-    public void showAllAssessments() {
-        updateFilteredAssessmentList(assessment -> true);
-    }
-
-    @Override
     public boolean hasGrade(Grade grade) {
         requireNonNull(grade);
         return addressBook.hasGrade(grade);
@@ -317,31 +306,6 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<Assessment> getFilteredAssessmentList() {
         return filteredAssessments;
-    }
-
-    @Override
-    public void showAssessmentsForCourse(Optional<String> courseCode) {
-        requireNonNull(courseCode);
-        setCurrentCourseForDisplay(courseCode);
-        setDisplayMode(DisplayMode.ASSESSMENTS);
-    }
-
-    @Override
-    public ObservableList<Assessment> getAssessmentsForCurrentCourse() {
-        ObservableList<Assessment> allAssessments = getAssessmentList();
-
-        if (currentCourseForDisplay.isEmpty()) {
-            return FXCollections.unmodifiableObservableList(
-                    FXCollections.observableArrayList(allAssessments));
-        }
-
-        String selectedCourse = currentCourseForDisplay.get();
-
-        return FXCollections.unmodifiableObservableList(
-                FXCollections.observableArrayList(
-                        allAssessments.stream()
-                                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(selectedCourse))
-                                .collect(Collectors.toList())));
     }
 
     @Override
