@@ -102,6 +102,16 @@ public interface Model {
 
     ObservableList<Assessment> getAssessmentList();
 
+    void updateFilteredAssessmentList(Predicate<Assessment> predicate);
+
+    void filterAssessmentListByCourse(String courseCode);
+
+    void showAllAssessments();
+
+    void showAssessmentsForCourse(Optional<String> courseCode);
+
+    ObservableList<Assessment> getAssessmentsForCurrentCourse();
+
     boolean hasGrade(Grade grade);
 
     void addGrade(Grade grade);

@@ -67,4 +67,6 @@ public interface Logic {
     ObservableList<Grade> getFilteredGradeList();
 
     DisplayMode getDisplayMode();
+
+    ObservableList<Assessment> getAssessmentsForCurrentCourse();
 }

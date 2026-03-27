@@ -115,4 +115,9 @@ public class LogicManager implements Logic {
     public DisplayMode getDisplayMode() {
         return model.getDisplayMode();
     }
+
+    @Override
+    public ObservableList<Assessment> getAssessmentsForCurrentCourse() {
+        return model.getAssessmentsForCurrentCourse();
+    }
 }
