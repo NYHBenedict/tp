@@ -6,6 +6,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 import seedu.address.logic.commands.ListAssessmentsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+/**
+ * Parses input arguments and creates a new ListAssessmentsCommand object.
+ */
 public class ListAssessmentsCommandParser implements Parser<ListAssessmentsCommand> {
 
     @Override
