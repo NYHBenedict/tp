@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ASSESSMENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,11 +33,11 @@ public class ListGradesCommand extends Command {
             + "Parameters:\n"
             + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
             + "  " + PREFIX_COURSE_CODE + "COURSE_CODE " + PREFIX_ASSESSMENT + "ASSESSMENT_INDEX\n"
-            + "  sid/STUDENT_ID\n"
+            + "  " + PREFIX_STUDENT_ID + "STUDENT_ID\n"
             + "Examples:\n"
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T\n"
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
-            + "  " + COMMAND_WORD + " sid/A0123456X";
+            + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
 
     public static final String MESSAGE_SUCCESS = "Displayed grades.";
     public static final String MESSAGE_COURSE_REQUIRED = "Please specify a course code. Example: listgrades c/CS2103T";
