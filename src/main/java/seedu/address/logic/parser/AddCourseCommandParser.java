@@ -29,8 +29,8 @@ public class AddCourseCommandParser implements Parser<AddCourseCommand> {
         String trimmedArgs = args.trim();
 
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT
-                                        + AddCourseCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    AddCourseCommand.MESSAGE_USAGE));
         }
 
         // Split by comma and parse each course code
