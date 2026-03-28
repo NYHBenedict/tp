@@ -40,8 +40,8 @@ public class AddCourseCommandParser implements Parser<AddCourseCommand> {
                 .collect(Collectors.toList());
 
         if (rawCodes.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT
-                                        + AddCourseCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    AddCourseCommand.MESSAGE_USAGE));
         }
 
         List<String> courseCodes = new ArrayList<>();

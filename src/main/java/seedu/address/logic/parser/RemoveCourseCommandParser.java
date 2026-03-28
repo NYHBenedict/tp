@@ -21,14 +21,15 @@ public class RemoveCourseCommandParser implements Parser<RemoveCourseCommand> {
         String trimmedArgs = args.trim();
 
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT + RemoveCourseCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    RemoveCourseCommand.MESSAGE_USAGE));
         }
         try {
             String courseCode = ParserUtil.parseCourseCode(trimmedArgs);
             return new RemoveCourseCommand(courseCode);
         } catch (ParseException pe) {
             throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT + RemoveCourseCommand.MESSAGE_USAGE),
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveCourseCommand.MESSAGE_USAGE),
                     pe);
         }
     }
