@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final FilteredList<Course> filteredCourses;
     private final FilteredList<Assessment> filteredAssessments;
     private final FilteredList<Grade> filteredGrades;
     private ObservableList<Course> courses;
@@ -39,6 +41,7 @@ public class ModelManager implements Model {
     private DisplayMode displayMode = DisplayMode.PERSONS;
     private Optional<String> currentCourseForDisplay = Optional.empty();
     private final ObservableList<Student> filteredStudents = FXCollections.observableArrayList();
+    private final ObservableList<Course> detailedCoursesForDisplay = FXCollections.observableArrayList();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -51,6 +54,7 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        filteredCourses = new FilteredList<>(this.addressBook.getCourseList());
         filteredAssessments = new FilteredList<>(this.addressBook.getAssessmentList());
         filteredGrades = new FilteredList<>(this.addressBook.getGradeList());
         this.courses = this.addressBook.getCourseList();
@@ -291,6 +295,22 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<Student> getFilteredStudentList() {
         return FXCollections.unmodifiableObservableList(filteredStudents);
+    }
+
+    @Override
+    public ObservableList<Course> getFilteredCourseList() {
+        return filteredCourses;
+    }
+
+    @Override
+    public ObservableList<Course> getDetailedCourseList() {
+        return FXCollections.unmodifiableObservableList(detailedCoursesForDisplay);
+    }
+
+    @Override
+    public void setDetailedCoursesForDisplay(List<Course> courses) {
+        requireNonNull(courses);
+        detailedCoursesForDisplay.setAll(courses);
     }
 
     @Override

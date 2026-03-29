@@ -242,7 +242,7 @@ public class ListCoursesCommandTest {
 
         @Override
         public void setCurrentCourseForDisplay(java.util.Optional<String> courseCode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override
@@ -262,7 +262,7 @@ public class ListCoursesCommandTest {
 
         @Override
         public void setDisplayMode(DisplayMode displayMode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override

@@ -2,11 +2,13 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
@@ -47,9 +49,10 @@ public class ListDetailsCommand extends Command {
         }
 
         StringBuilder sb = new StringBuilder();
+        List<Course> coursesToDisplay = new ArrayList<>();
 
-        for (int i = 0; i < courseCodes.size(); i++) {
-            String courseCode = courseCodes.get(i).trim().toUpperCase();
+        for (String rawCourseCode : courseCodes) {
+            String courseCode = rawCourseCode.trim().toUpperCase();
 
             if (!model.hasCourse(courseCode)) {
                 throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
@@ -59,7 +62,12 @@ public class ListDetailsCommand extends Command {
             if (courseOptional.isEmpty()) {
                 throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
             }
-            Course course = courseOptional.get();
+
+            coursesToDisplay.add(courseOptional.get());
+        }
+
+        for (int i = 0; i < coursesToDisplay.size(); i++) {
+            Course course = coursesToDisplay.get(i);
 
             sb.append("Course: ").append(course.getCourseCode()).append("\n");
 
@@ -83,10 +91,14 @@ public class ListDetailsCommand extends Command {
                 }
             }
 
-            if (i < courseCodes.size() - 1) {
+            if (i < coursesToDisplay.size() - 1) {
                 sb.append("\n");
             }
         }
+
+        model.setCurrentCourseForDisplay(Optional.empty());
+        model.setDetailedCoursesForDisplay(coursesToDisplay);
+        model.setDisplayMode(DisplayMode.COURSE_DETAILS);
 
         return new CommandResult(sb.toString().trim());
     }

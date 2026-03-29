@@ -360,3 +360,9 @@
     -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
+
+.course-section-header {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-text-fill: #5c7cfa;
+}
