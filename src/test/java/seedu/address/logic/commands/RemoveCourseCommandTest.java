@@ -40,7 +40,7 @@ public class RemoveCourseCommandTest {
         ModelStubWithCourse modelStub = new ModelStubWithCourse("CS2103T");
         String validCourseCode = "CS2103T";
 
-        CommandResult commandResult = new RemoveCourseCommand(validCourseCode).execute(modelStub);
+        CommandResult commandResult = new RemoveCourseCommand(Arrays.asList(validCourseCode)).execute(modelStub);
 
         assertEquals(String.format(RemoveCourseCommand.MESSAGE_SUCCESS, validCourseCode),
                 commandResult.getFeedbackToUser());
@@ -48,28 +48,39 @@ public class RemoveCourseCommandTest {
     }
 
     @Test
+    public void execute_multipleCourseCodesAcceptedByModel_removeSuccessful() throws Exception {
+        ModelStubWithCourses modelStub = new ModelStubWithCourses("CS2103T", "CS2101");
+
+        CommandResult commandResult = new RemoveCourseCommand(Arrays.asList("CS2103T", "CS2101")).execute(modelStub);
+
+        assertEquals(String.format(RemoveCourseCommand.MESSAGE_SUCCESS, "CS2103T, CS2101"),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList("CS2103T", "CS2101"), modelStub.coursesRemoved);
+    }
+
+    @Test
     public void execute_courseNotFound_throwsCommandException() {
         String nonexistentCourseCode = "CS9999";
-        RemoveCourseCommand removeCourseCommand = new RemoveCourseCommand(nonexistentCourseCode);
+        RemoveCourseCommand removeCourseCommand = new RemoveCourseCommand(Arrays.asList(nonexistentCourseCode));
         ModelStub modelStub = new ModelStubWithoutCourse();
 
         assertThrows(CommandException.class,
-            String.format(RemoveCourseCommand.MESSAGE_COURSE_NOT_FOUND, nonexistentCourseCode),
-                () -> removeCourseCommand.execute(modelStub));
+            String.format(RemoveCourseCommand.MESSAGE_COURSE_NOT_FOUND, nonexistentCourseCode), ()
+                                                -> removeCourseCommand.execute(modelStub));
     }
 
     @Test
     public void equals() {
         String courseCodeA = "CS2103T";
         String courseCodeB = "CS2101";
-        RemoveCourseCommand removeCourseCommandA = new RemoveCourseCommand(courseCodeA);
-        RemoveCourseCommand removeCourseCommandB = new RemoveCourseCommand(courseCodeB);
+        RemoveCourseCommand removeCourseCommandA = new RemoveCourseCommand(Arrays.asList(courseCodeA));
+        RemoveCourseCommand removeCourseCommandB = new RemoveCourseCommand(Arrays.asList(courseCodeB));
 
         // same object -> returns true
         assertTrue(removeCourseCommandA.equals(removeCourseCommandA));
 
         // same values -> returns true
-        RemoveCourseCommand removeCourseCommandACopy = new RemoveCourseCommand(courseCodeA);
+        RemoveCourseCommand removeCourseCommandACopy = new RemoveCourseCommand(Arrays.asList(courseCodeA));
         assertTrue(removeCourseCommandA.equals(removeCourseCommandACopy));
 
         // different types -> returns false
@@ -331,6 +342,30 @@ public class RemoveCourseCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+    }
+
+    /**
+     * A Model stub that contains multiple courses.
+     */
+    private class ModelStubWithCourses extends ModelStub {
+        final ArrayList<String> coursesRemoved = new ArrayList<>();
+        private final ArrayList<String> existingCourses = new ArrayList<>();
+
+        ModelStubWithCourses(String... courseCodes) {
+            existingCourses.addAll(Arrays.asList(courseCodes));
+        }
+
+        @Override
+        public boolean hasCourse(String courseCode) {
+            requireNonNull(courseCode);
+            return existingCourses.contains(courseCode) && !coursesRemoved.contains(courseCode);
+        }
+
+        @Override
+        public void removeCourse(Course course) {
+            requireNonNull(course);
+            coursesRemoved.add(course.getCourseCode());
         }
     }
 

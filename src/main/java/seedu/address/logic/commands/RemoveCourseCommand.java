@@ -19,47 +19,49 @@ public class RemoveCourseCommand extends Command {
     public static final String COMMAND_WORD = "removecourse";
 
     // Delete by course index on displaying
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Removes an existing course.\n"
-            + "Parameters: " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2102";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Removes one or more existing courses.\n"
+            + "Parameters: " + PREFIX_COURSE_CODE + "COURSE_CODE[,COURSE_CODE]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2102,CS2103T";
 
-    public static final String MESSAGE_SUCCESS = "\u2705 Removed course %s.";
+    public static final String MESSAGE_SUCCESS = "\u2705 Removed course(s): %s.";
     public static final String MESSAGE_COURSE_NOT_FOUND = "\u274C Course %s not found.";
 
-    private final String courseCode;
+    private final List<String> courseCodes;
 
     /**
-     * Constructs a RemoveCourseCommand with the specified course index.
+     * Constructs a RemoveCourseCommand with the specified course codes.
      *
-     * @param course the course index
+     * @param courseCodes the course codes
      */
-    public RemoveCourseCommand(String course) {
-        requireNonNull(course);
-
-        this.courseCode = course;
+    public RemoveCourseCommand(List<String> courseCodes) {
+        requireNonNull(courseCodes);
+        this.courseCodes = courseCodes;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Course course = new Course(courseCode);
-
-        if (!model.hasCourse(courseCode)) {
-            throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
+        for (String courseCode : courseCodes) {
+            if (!model.hasCourse(courseCode)) {
+                throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
+            }
         }
 
-        model.removeCourse(course);
+        for (String courseCode : courseCodes) {
+            model.removeCourse(new Course(courseCode));
+        }
+
         model.setCurrentCourseForDisplay(Optional.empty());
         model.setDetailedCoursesForDisplay(List.of());
         model.setDisplayMode(DisplayMode.COURSES);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, courseCode));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, String.join(", ", courseCodes)));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof RemoveCourseCommand
-                        && courseCode.equals(((RemoveCourseCommand) other).courseCode));
+                        && courseCodes.equals(((RemoveCourseCommand) other).courseCodes));
     }
 }

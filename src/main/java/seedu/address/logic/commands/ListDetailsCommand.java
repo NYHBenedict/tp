@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
-import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
-import seedu.address.model.student.Student;
 
 /**
  * Lists all assessments and all students for the specified course(s).
