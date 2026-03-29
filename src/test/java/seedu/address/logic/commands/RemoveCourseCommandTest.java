@@ -54,7 +54,8 @@ public class RemoveCourseCommandTest {
         ModelStub modelStub = new ModelStubWithoutCourse();
 
         assertThrows(CommandException.class,
-            RemoveCourseCommand.MESSAGE_COURSE_NOT_FOUND, () -> removeCourseCommand.execute(modelStub));
+            String.format(RemoveCourseCommand.MESSAGE_COURSE_NOT_FOUND, nonexistentCourseCode),
+                () -> removeCourseCommand.execute(modelStub));
     }
 
     @Test
@@ -263,7 +264,7 @@ public class RemoveCourseCommandTest {
 
         @Override
         public void setCurrentCourseForDisplay(java.util.Optional<String> courseCode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override
@@ -283,7 +284,7 @@ public class RemoveCourseCommandTest {
 
         @Override
         public void setDisplayMode(DisplayMode displayMode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override

@@ -15,15 +15,15 @@ public class AddCourseCommandParserTest {
 
     @Test
     public void parse_validSingleCourseCode_success() {
-        String validCourseCode = "CS2103T";
-        AddCourseCommand expectedCommand = new AddCourseCommand(Arrays.asList(validCourseCode));
+        String input = "c/CS2103T";
+        AddCourseCommand expectedCommand = new AddCourseCommand(Arrays.asList("CS2103T"));
 
-        assertParseSuccess(parser, validCourseCode, expectedCommand);
+        assertParseSuccess(parser, input, expectedCommand);
     }
 
     @Test
     public void parse_validMultipleCourseCodes_success() {
-        String input = "CS2103T,CS2101";
+        String input = "c/CS2103T,CS2101";
         AddCourseCommand expectedCommand = new AddCourseCommand(Arrays.asList("CS2103T", "CS2101"));
 
         assertParseSuccess(parser, input, expectedCommand);
@@ -31,10 +31,16 @@ public class AddCourseCommandParserTest {
 
     @Test
     public void parse_courseCodesWithWhitespace_success() {
-        String input = "CS2103T , CS2101 , CS2100";
+        String input = "c/CS2103T , CS2101 , CS2100";
         AddCourseCommand expectedCommand = new AddCourseCommand(Arrays.asList("CS2103T", "CS2101", "CS2100"));
 
         assertParseSuccess(parser, input, expectedCommand);
+    }
+
+    @Test
+    public void parse_missingPrefix_failure() {
+        assertParseFailure(parser, "CS2103T",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCourseCommand.MESSAGE_USAGE));
     }
 
     @Test

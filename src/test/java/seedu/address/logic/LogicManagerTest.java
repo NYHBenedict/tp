@@ -99,8 +99,8 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getDisplayMode_defaultIsPersons() {
-        assertEquals(DisplayMode.PERSONS, logic.getDisplayMode());
+    public void getDisplayMode_defaultIsCourses() {
+        assertEquals(DisplayMode.COURSES, logic.getDisplayMode());
     }
 
     /**

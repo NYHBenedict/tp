@@ -34,11 +34,8 @@ public class ModelManager implements Model {
     private final FilteredList<Course> filteredCourses;
     private final FilteredList<Assessment> filteredAssessments;
     private final FilteredList<Grade> filteredGrades;
-    private ObservableList<Course> courses;
-    private ObservableList<Grade> grades;
-
     // Student GUI display state
-    private DisplayMode displayMode = DisplayMode.PERSONS;
+    private DisplayMode displayMode = DisplayMode.COURSES;
     private Optional<String> currentCourseForDisplay = Optional.empty();
     private final ObservableList<Student> filteredStudents = FXCollections.observableArrayList();
     private final ObservableList<Course> detailedCoursesForDisplay = FXCollections.observableArrayList();
@@ -57,7 +54,6 @@ public class ModelManager implements Model {
         filteredCourses = new FilteredList<>(this.addressBook.getCourseList());
         filteredAssessments = new FilteredList<>(this.addressBook.getAssessmentList());
         filteredGrades = new FilteredList<>(this.addressBook.getGradeList());
-        this.courses = this.addressBook.getCourseList();
     }
 
     public ModelManager() {

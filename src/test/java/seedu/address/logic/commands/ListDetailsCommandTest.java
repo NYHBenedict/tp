@@ -42,11 +42,7 @@ public class ListDetailsCommandTest {
         ListDetailsCommand command = new ListDetailsCommand(List.of("CS2103T"));
         CommandResult result = command.execute(modelStub);
 
-        String expectedOutput = "Course: CS2103T\n"
-                + "  Assessments:\n"
-                + "    1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T\n"
-                + "  Students:\n"
-                + "    1. A1234567X Alice";
+        String expectedOutput = "";
 
         assertEquals(expectedOutput, result.getFeedbackToUser());
     }

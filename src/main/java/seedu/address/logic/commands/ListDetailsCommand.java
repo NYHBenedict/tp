@@ -48,7 +48,6 @@ public class ListDetailsCommand extends Command {
             throw new CommandException("\u274C No course codes provided.");
         }
 
-        StringBuilder sb = new StringBuilder();
         List<Course> coursesToDisplay = new ArrayList<>();
 
         for (String rawCourseCode : courseCodes) {
@@ -66,41 +65,11 @@ public class ListDetailsCommand extends Command {
             coursesToDisplay.add(courseOptional.get());
         }
 
-        for (int i = 0; i < coursesToDisplay.size(); i++) {
-            Course course = coursesToDisplay.get(i);
-
-            sb.append("Course: ").append(course.getCourseCode()).append("\n");
-
-            ObservableList<Assessment> assessments = course.getAssessments();
-            sb.append("  Assessments:\n");
-            if (assessments.isEmpty()) {
-                sb.append("    No assessments found.\n");
-            } else {
-                for (int j = 0; j < assessments.size(); j++) {
-                    sb.append("    ").append(j + 1).append(". ").append(assessments.get(j)).append("\n");
-                }
-            }
-
-            List<Student> students = course.getStudents();
-            sb.append("  Students:\n");
-            if (students.isEmpty()) {
-                sb.append("    No students found.\n");
-            } else {
-                for (int j = 0; j < students.size(); j++) {
-                    sb.append("    ").append(j + 1).append(". ").append(students.get(j)).append("\n");
-                }
-            }
-
-            if (i < coursesToDisplay.size() - 1) {
-                sb.append("\n");
-            }
-        }
-
         model.setCurrentCourseForDisplay(Optional.empty());
         model.setDetailedCoursesForDisplay(coursesToDisplay);
         model.setDisplayMode(DisplayMode.COURSE_DETAILS);
 
-        return new CommandResult(sb.toString().trim());
+        return new CommandResult("");
     }
 
     @Override

@@ -33,15 +33,9 @@ public class ListCoursesCommand extends Command {
         model.setDisplayMode(DisplayMode.COURSES);
 
         if (courses.isEmpty()) {
-            return new CommandResult("No Courses found.");
+            return new CommandResult("");
         }
-
-        StringBuilder sb = new StringBuilder("Courses:\n");
-        for (int i = 0; i < courses.size(); i++) {
-            sb.append(i + 1).append(". ").append(courses.get(i)).append("\n");
-        }
-
-        return new CommandResult(sb.toString().trim());
+        return new CommandResult("");
     }
 
     @Override

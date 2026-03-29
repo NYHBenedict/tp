@@ -12,7 +12,7 @@ import javafx.collections.ObservableList;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.assessment.UniqueAssessmentList;
 import seedu.address.model.course.Course;
-import seedu.address.model.course.CourseList;
+import seedu.address.model.course.UniqueCourseList;
 import seedu.address.model.grade.Grade;
 import seedu.address.model.grade.UniqueGradeList;
 import seedu.address.model.person.Person;
@@ -28,13 +28,13 @@ public class AddressBook implements ReadOnlyAddressBook {
     private final UniquePersonList persons;
     private final UniqueAssessmentList assessments;
     private final UniqueGradeList grades;
-    private final CourseList courses;
+    private final UniqueCourseList courses;
 
     {
         persons = new UniquePersonList();
         assessments = new UniqueAssessmentList();
         grades = new UniqueGradeList();
-        courses = new CourseList();
+        courses = new UniqueCourseList();
     }
 
     public AddressBook() {
@@ -68,7 +68,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     public void setCourses(List<Course> courseList) {
         requireNonNull(courseList);
-        this.courses.setCourseList(courseList);
+        this.courses.setCourses(courseList);
     }
 
     /**
@@ -187,7 +187,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public boolean hasCourse(Course courseCode) {
         requireNonNull(courseCode);
-        return courses.courseExists(courseCode);
+        return courses.contains(courseCode);
     }
 
     /**
@@ -195,7 +195,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addCourse(Course course) {
         requireNonNull(course);
-        courses.addCourse(course);
+        courses.add(course);
     }
 
     /**
@@ -229,13 +229,15 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         // Remove the course object from course list
-        courses.removeCourseByName(course);
+        courses.remove(course);
     }
 
     /** Gets a list of courses with partial matches to the given course code */
     public Optional<Course> getCourse(String courseCode) {
         requireNonNull(courseCode);
-        return Optional.ofNullable(courses.findCourseCode(courseCode));
+        return courses.asUnmodifiableObservableList().stream()
+                .filter(course -> course.getCourseCode().equalsIgnoreCase(courseCode.trim()))
+                .findFirst();
     }
 
     /** Adds a student to the specified course. Course must exist. */
@@ -258,7 +260,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public ObservableList<Course> getCourseList() {
-        return FXCollections.observableList(courses.getCourses());
+        return courses.asUnmodifiableObservableList();
     }
 
     //// util methods
@@ -290,11 +292,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         AddressBook otherAddressBook = (AddressBook) other;
         return persons.equals(otherAddressBook.persons)
                 && assessments.equals(otherAddressBook.assessments)
-                && grades.equals(otherAddressBook.grades);
+                && grades.equals(otherAddressBook.grades)
+                && courses.equals(otherAddressBook.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(persons, assessments, grades);
+        return Objects.hash(persons, assessments, grades, courses);
     }
 }
