@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
+import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
 
 /**
@@ -13,6 +14,7 @@ import seedu.address.model.course.Course;
 public class CourseDetailListPanel extends UiPart<Region> {
 
     private static final String FXML = "CourseDetailListPanel.fxml";
+    private final ObservableList<Assessment> assessmentList;
 
     @FXML
     private ListView<Course> courseDetailListView;
@@ -20,8 +22,9 @@ public class CourseDetailListPanel extends UiPart<Region> {
     /**
      * Creates a {@code CourseDetailListPanel} that displays the given list of courses.
      */
-    public CourseDetailListPanel(ObservableList<Course> courseList) {
+    public CourseDetailListPanel(ObservableList<Course> courseList, ObservableList<Assessment> assessmentList) {
         super(FXML);
+        this.assessmentList = assessmentList;
         courseDetailListView.setItems(courseList);
         courseDetailListView.setCellFactory(listView -> new CourseDetailListViewCell());
     }
@@ -35,7 +38,7 @@ public class CourseDetailListPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new CourseDetailCard(course, getIndex() + 1).getRoot());
+                setGraphic(new CourseDetailCard(course, getIndex() + 1, assessmentList).getRoot());
             }
         }
     }

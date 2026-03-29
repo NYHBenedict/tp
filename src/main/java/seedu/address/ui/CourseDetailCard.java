@@ -1,5 +1,9 @@
 package seedu.address.ui;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -34,27 +38,30 @@ public class CourseDetailCard extends UiPart<Region> {
     /**
      * Creates a {@code CourseDetailCard} for the given {@code Course}.
      */
-    public CourseDetailCard(Course course, int displayedIndex) {
+    public CourseDetailCard(Course course, int displayedIndex, ObservableList<Assessment> assessmentList) {
         super(FXML);
         this.course = course;
+        List<Assessment> courseAssessments = assessmentList.stream()
+                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(course.getCourseCode()))
+                .collect(Collectors.toList());
 
         id.setText(displayedIndex + ". ");
         courseCode.setText(course.getCourseCode());
         summary.setText(String.format("Assessments: %d | Students: %d",
-                course.getAssessments().size(), course.getStudents().size()));
+                courseAssessments.size(), course.getStudents().size()));
 
-        populateAssessments();
+        populateAssessments(courseAssessments);
         populateStudents();
     }
 
-    private void populateAssessments() {
-        if (course.getAssessments().isEmpty()) {
+    private void populateAssessments(List<Assessment> assessments) {
+        if (assessments.isEmpty()) {
             assessmentsContainer.getChildren().add(createDetailLabel("No assessments found."));
             return;
         }
 
         int index = 1;
-        for (Assessment assessment : course.getAssessments()) {
+        for (Assessment assessment : assessments) {
             assessmentsContainer.getChildren().add(createDetailLabel(
                     index + ". " + assessment.getAssessmentName() + " (Max Grade: " + assessment.getMaxScore() + ")"));
             index++;

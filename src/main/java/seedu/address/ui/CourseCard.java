@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.collections.ObservableList;
+import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
 
 /**
@@ -29,13 +31,19 @@ public class CourseCard extends UiPart<Region> {
     /**
      * Creates a {@code CourseCard} for the given {@code Course}.
      */
-    public CourseCard(Course course, int displayedIndex) {
+    public CourseCard(Course course, int displayedIndex, ObservableList<Assessment> assessmentList) {
         super(FXML);
         this.course = course;
 
         id.setText(displayedIndex + ". ");
         courseCode.setText(course.getCourseCode());
-        assessmentCount.setText("Assessments: " + course.getAssessments().size());
+        assessmentCount.setText("Assessments: " + countAssessmentsForCourse(assessmentList));
         studentCount.setText("Students: " + course.getStudents().size());
+    }
+
+    private long countAssessmentsForCourse(ObservableList<Assessment> assessmentList) {
+        return assessmentList.stream()
+                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(course.getCourseCode()))
+                .count();
     }
 }
