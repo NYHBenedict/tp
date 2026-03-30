@@ -169,20 +169,38 @@ public class GradeListPanel extends UiPart<Region> {
         private final String score;
         private final String studentId;
 
+        /**
+         * Creates a grade row for one student.
+         * @param studentName the student name
+         * @param score       the student's score
+         * @param studentId   the student ID
+         */
         public GradeRow(String studentName, String score, String studentId) {
             this.studentName = studentName;
             this.score = score;
             this.studentId = studentId;
         }
 
+        /**
+         * Returns the student's name.
+         * @return the student name
+         */
         public String getStudentName() {
             return studentName;
         }
 
+        /**
+         * Returns the student's score.
+         * @return the score
+         */
         public String getScore() {
             return score;
         }
 
+        /**
+         * Returns the student's ID.
+         * @return the student ID
+         */
         public String getStudentId() {
             return studentId;
         }
