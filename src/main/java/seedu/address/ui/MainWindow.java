@@ -1,6 +1,5 @@
 package seedu.address.ui;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
@@ -35,6 +34,8 @@ public class MainWindow extends UiPart<Stage> {
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
     private StudentListPanel studentListPanel;
+    private CourseListPanel courseListPanel;
+    private CourseDetailListPanel courseDetailListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
     private AssessmentListPanel assessmentListPanel;
@@ -117,6 +118,11 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         studentListPanel = new StudentListPanel(logic.getFilteredStudentList());
+        courseListPanel = new CourseListPanel(logic.getFilteredCourseList(),
+                                logic.getAddressBook().getAssessmentList());
+        courseDetailListPanel = new CourseDetailListPanel(
+                logic.getDetailedCourseList(),
+                logic.getAddressBook().getAssessmentList());
         assessmentListPanel = new AssessmentListPanel(logic.getFilteredAssessmentList());
         gradeListPanel = new GradeListPanel(
                 logic.getFilteredGradeList(),
@@ -125,6 +131,8 @@ public class MainWindow extends UiPart<Stage> {
         personListPanelPlaceholder.getChildren().setAll(
                 personListPanel.getRoot(),
                 studentListPanel.getRoot(),
+                courseListPanel.getRoot(),
+                courseDetailListPanel.getRoot(),
                 assessmentListPanel.getRoot(),
                 gradeListPanel.getRoot());
 
@@ -140,6 +148,12 @@ public class MainWindow extends UiPart<Stage> {
         gradeListPanel.getRoot().setVisible(false);
         gradeListPanel.getRoot().setManaged(false);
 
+        courseListPanel.getRoot().setVisible(false);
+        courseListPanel.getRoot().setManaged(false);
+
+        courseDetailListPanel.getRoot().setVisible(false);
+        courseDetailListPanel.getRoot().setManaged(false);
+
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
@@ -154,10 +168,11 @@ public class MainWindow extends UiPart<Stage> {
 
     private void updateListVisibility() {
         DisplayMode displayMode = logic.getDisplayMode();
-        Optional<String> currentCourse = logic.getCurrentCourseForDisplay();
 
         boolean showPersons = displayMode == DisplayMode.PERSONS;
         boolean showStudents = displayMode == DisplayMode.STUDENTS;
+        boolean showCourses = displayMode == DisplayMode.COURSES;
+        boolean showCourseDetails = displayMode == DisplayMode.COURSE_DETAILS;
         boolean showAssessments = displayMode == DisplayMode.ASSESSMENTS;
         boolean showGrades = displayMode == DisplayMode.GRADES;
 
@@ -166,6 +181,12 @@ public class MainWindow extends UiPart<Stage> {
 
         studentListPanel.getRoot().setVisible(showStudents);
         studentListPanel.getRoot().setManaged(showStudents);
+
+        courseListPanel.getRoot().setVisible(showCourses);
+        courseListPanel.getRoot().setManaged(showCourses);
+
+        courseDetailListPanel.getRoot().setVisible(showCourseDetails);
+        courseDetailListPanel.getRoot().setManaged(showCourseDetails);
 
         assessmentListPanel.getRoot().setVisible(showAssessments);
         assessmentListPanel.getRoot().setManaged(showAssessments);

@@ -33,7 +33,6 @@ public class ListDetailsCommandTest {
     @Test
     public void execute_singleCourse_success() throws Exception {
         Course course = new Course("CS2103T");
-        course.addAssessment(new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")));
         course.addStudent(new Student("A1234567X", "Alice"));
 
         ModelStub modelStub = new ModelStub();
@@ -42,11 +41,7 @@ public class ListDetailsCommandTest {
         ListDetailsCommand command = new ListDetailsCommand(List.of("CS2103T"));
         CommandResult result = command.execute(modelStub);
 
-        String expectedOutput = "Course: CS2103T\n"
-                + "  Assessments:\n"
-                + "    1. Assessment Name: Quiz 1 (Max Score: 10) in CS2103T\n"
-                + "  Students:\n"
-                + "    1. A1234567X Alice";
+        String expectedOutput = "";
 
         assertEquals(expectedOutput, result.getFeedbackToUser());
     }
@@ -90,7 +85,8 @@ public class ListDetailsCommandTest {
 
         @Override
         public ObservableList<Assessment> getAssessmentList() {
-            return FXCollections.observableArrayList();
+            return FXCollections.observableArrayList(
+                    new Assessment("CS2103T", new AssessmentName("Quiz 1"), new MaxScore("10")));
         }
 
         // Remaining methods not needed for these tests
@@ -206,7 +202,7 @@ public class ListDetailsCommandTest {
 
         @Override
         public void setCurrentCourseForDisplay(Optional<String> courseCode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override
@@ -251,7 +247,7 @@ public class ListDetailsCommandTest {
 
         @Override
         public void setDisplayMode(DisplayMode displayMode) {
-            throw new AssertionError("This method should not be called.");
+            // no-op for GUI state updates
         }
 
         @Override

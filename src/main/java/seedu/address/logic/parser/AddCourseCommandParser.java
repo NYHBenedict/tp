@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,16 +26,20 @@ public class AddCourseCommandParser implements Parser<AddCourseCommand> {
      */
     public AddCourseCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(" " + args.trim(), PREFIX_COURSE_CODE);
 
-        String trimmedArgs = args.trim();
-
-        if (trimmedArgs.isEmpty()) {
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_COURSE_CODE)
+                || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     AddCourseCommand.MESSAGE_USAGE));
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_COURSE_CODE);
+
+        String rawCourseCodes = argMultimap.getValue(PREFIX_COURSE_CODE).orElse("").trim();
+
         // Split by comma and parse each course code
-        List<String> rawCodes = Arrays.stream(trimmedArgs.split(","))
+        List<String> rawCodes = Arrays.stream(rawCourseCodes.split(","))
                 .map(String::trim)
                 .filter(code -> !code.isEmpty())
                 .collect(Collectors.toList());

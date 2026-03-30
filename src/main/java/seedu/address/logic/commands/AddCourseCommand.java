@@ -3,8 +3,10 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.course.Course;
 
@@ -16,13 +18,13 @@ public class AddCourseCommand extends Command {
     public static final String COMMAND_WORD = "addcourse";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds one or more new courses.\n"
-            + "Parameters: COURSE_CODE [,COURSE_CODE]...\n"
-            + "Example: " + COMMAND_WORD + " CS2103T,CS2101";
+            + "Parameters: c/COURSE_CODE[,COURSE_CODE]...\n"
+            + "Example: " + COMMAND_WORD + " c/CS2103T,CS2101";
 
-    public static final String MESSAGE_FORMAT = "\u274C Format: " + COMMAND_WORD + " COURSE_CODE [,COURSE_CODE]...";
+    public static final String MESSAGE_FORMAT = "\u274C Format: " + COMMAND_WORD + " c/COURSE_CODE[,COURSE_CODE]...";
 
-    public static final String MESSAGE_SUCCESS = "New Course(s) added: %s";
-    public static final String MESSAGE_DUPLICATE_COURSE = "This Course already exists: %s";
+    public static final String MESSAGE_SUCCESS = "\u2705 Course added: %s.";
+    public static final String MESSAGE_DUPLICATE_COURSE = "\u274C Course %s already exists.";
 
     private final List<String> courseCodes;
 
@@ -54,6 +56,9 @@ public class AddCourseCommand extends Command {
         }
 
         String addedCourses = String.join(", ", courseCodes);
+        model.setCurrentCourseForDisplay(Optional.empty());
+        model.setDetailedCoursesForDisplay(List.of());
+        model.setDisplayMode(DisplayMode.COURSES);
         return new CommandResult(String.format(MESSAGE_SUCCESS, addedCourses));
     }
 

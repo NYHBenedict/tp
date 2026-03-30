@@ -1,9 +1,11 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.assessment.Assessment;
@@ -139,6 +141,20 @@ public interface Model {
 
     /** Returns the live observable list of students for the currently displayed course. */
     ObservableList<Student> getFilteredStudentList();
+
+    /** Returns an unmodifiable view of the course list shown in the GUI. */
+    default ObservableList<Course> getFilteredCourseList() {
+        return FXCollections.observableArrayList();
+    }
+
+    /** Returns the courses whose expanded details should be displayed in the GUI. */
+    default ObservableList<Course> getDetailedCourseList() {
+        return FXCollections.observableArrayList();
+    }
+
+    /** Sets the course details list shown in the GUI. */
+    default void setDetailedCoursesForDisplay(List<Course> courses) {
+    }
 
     /** Sets the course code whose student list should be displayed in the GUI. */
     void setCurrentCourseForDisplay(Optional<String> courseCode);
