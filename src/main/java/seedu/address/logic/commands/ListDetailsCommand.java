@@ -2,15 +2,14 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javafx.collections.ObservableList;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
-import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
-import seedu.address.model.student.Student;
 
 /**
  * Lists all assessments and all students for the specified course(s).
@@ -46,10 +45,10 @@ public class ListDetailsCommand extends Command {
             throw new CommandException("\u274C No course codes provided.");
         }
 
-        StringBuilder sb = new StringBuilder();
+        List<Course> coursesToDisplay = new ArrayList<>();
 
-        for (int i = 0; i < courseCodes.size(); i++) {
-            String courseCode = courseCodes.get(i).trim().toUpperCase();
+        for (String rawCourseCode : courseCodes) {
+            String courseCode = rawCourseCode.trim().toUpperCase();
 
             if (!model.hasCourse(courseCode)) {
                 throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
@@ -59,36 +58,15 @@ public class ListDetailsCommand extends Command {
             if (courseOptional.isEmpty()) {
                 throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
             }
-            Course course = courseOptional.get();
 
-            sb.append("Course: ").append(course.getCourseCode()).append("\n");
-
-            ObservableList<Assessment> assessments = course.getAssessments();
-            sb.append("  Assessments:\n");
-            if (assessments.isEmpty()) {
-                sb.append("    No assessments found.\n");
-            } else {
-                for (int j = 0; j < assessments.size(); j++) {
-                    sb.append("    ").append(j + 1).append(". ").append(assessments.get(j)).append("\n");
-                }
-            }
-
-            List<Student> students = course.getStudents();
-            sb.append("  Students:\n");
-            if (students.isEmpty()) {
-                sb.append("    No students found.\n");
-            } else {
-                for (int j = 0; j < students.size(); j++) {
-                    sb.append("    ").append(j + 1).append(". ").append(students.get(j)).append("\n");
-                }
-            }
-
-            if (i < courseCodes.size() - 1) {
-                sb.append("\n");
-            }
+            coursesToDisplay.add(courseOptional.get());
         }
 
-        return new CommandResult(sb.toString().trim());
+        model.setCurrentCourseForDisplay(Optional.empty());
+        model.setDetailedCoursesForDisplay(coursesToDisplay);
+        model.setDisplayMode(DisplayMode.COURSE_DETAILS);
+
+        return new CommandResult("");
     }
 
     @Override

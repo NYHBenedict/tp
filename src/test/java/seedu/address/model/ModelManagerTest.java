@@ -109,8 +109,8 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void displayMode_defaultIsPersons() {
-        assertEquals(DisplayMode.PERSONS, modelManager.getDisplayMode());
+    public void displayMode_defaultIsCourses() {
+        assertEquals(DisplayMode.COURSES, modelManager.getDisplayMode());
     }
 
     @Test
@@ -183,7 +183,7 @@ public class ModelManagerTest {
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.setDisplayMode(DisplayMode.PERSONS);
+        modelManager.setDisplayMode(DisplayMode.COURSES);
 
         Grade gradeOne = new Grade("CS2103T", new StudentId("A1234567X"),
                 new AssessmentName("Quiz 1"), new Score("10"));

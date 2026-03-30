@@ -6,6 +6,8 @@ package seedu.address.model;
 public enum DisplayMode {
     PERSONS,
     STUDENTS,
+    COURSES,
+    COURSE_DETAILS,
     ASSESSMENTS,
     GRADES
 }
