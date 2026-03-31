@@ -24,27 +24,26 @@ public class AddGradeCommandParser implements Parser<AddGradeCommand> {
     * @throws ParseException if the user input does not conform the expected format
     */
     @Override
-        public AddGradeCommand parse(String args) throws ParseException {
-            requireNonNull(args);
+    public AddGradeCommand parse(String args) throws ParseException {
+        requireNonNull(args);
 
-            ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 args, PREFIX_STUDENT_ID, PREFIX_ASSESSMENT, PREFIX_GRADE, PREFIX_COURSE_CODE);
 
-            if (!ParserUtil.arePrefixesPresent(argMultimap,
-                PREFIX_STUDENT_ID, PREFIX_ASSESSMENT, PREFIX_GRADE, PREFIX_COURSE_CODE)
-                || !argMultimap.getPreamble().isEmpty()) {
+        if (!ParserUtil.arePrefixesPresent(argMultimap, PREFIX_STUDENT_ID, PREFIX_ASSESSMENT,
+                PREFIX_GRADE, PREFIX_COURSE_CODE) || !argMultimap.getPreamble().isEmpty()) {
                         throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                                 AddGradeCommand.MESSAGE_USAGE));
+                                AddGradeCommand.MESSAGE_USAGE));
                 }
 
-            argMultimap.verifyNoDuplicatePrefixesFor(
+        argMultimap.verifyNoDuplicatePrefixesFor(
                 PREFIX_STUDENT_ID, PREFIX_ASSESSMENT, PREFIX_GRADE, PREFIX_COURSE_CODE);
 
-            String studentId = ParserUtil.parseStudentId(argMultimap.getValue(PREFIX_STUDENT_ID).get());
-            Index assessmentIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_ASSESSMENT).get());
-            Score score = ParserUtil.parseScore(argMultimap.getValue(PREFIX_GRADE).get());
-            String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE_CODE).get());
+        String studentId = ParserUtil.parseStudentId(argMultimap.getValue(PREFIX_STUDENT_ID).get());
+        Index assessmentIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_ASSESSMENT).get());
+        Score score = ParserUtil.parseScore(argMultimap.getValue(PREFIX_GRADE).get());
+        String courseCode = ParserUtil.parseCourseCode(argMultimap.getValue(PREFIX_COURSE_CODE).get());
 
-            return new AddGradeCommand(courseCode, studentId, assessmentIndex, score);
-        }
+        return new AddGradeCommand(courseCode, studentId, assessmentIndex, score);
+    }
 }
