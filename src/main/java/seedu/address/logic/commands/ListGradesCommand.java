@@ -7,7 +7,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,6 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.assessment.Assessment;
-import seedu.address.model.assessment.MaxScore;
 import seedu.address.model.grade.Grade;
 
 /**
@@ -29,18 +27,17 @@ public class ListGradesCommand extends Command {
     public static final String COMMAND_WORD = "listgrades";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Lists grades for a course, a course assessment, or a student.\n"
-            + "Parameters:\n"
-            + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
-            + "  " + PREFIX_COURSE_CODE + "COURSE_CODE " + PREFIX_ASSESSMENT + "ASSESSMENT_INDEX\n"
-            + "  " + PREFIX_STUDENT_ID + "STUDENT_ID\n"
-            + "Examples:\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
-            + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
+        + ": Lists grades for a course, a course assessment, or a student.\n"
+        + "Parameters:\n"
+        + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
+        + "  " + PREFIX_COURSE_CODE + "COURSE_CODE " + PREFIX_ASSESSMENT + "ASSESSMENT_INDEX\n"
+        + "  " + PREFIX_STUDENT_ID + "STUDENT_ID\n"
+        + "Examples:\n"
+        + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T\n"
+        + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
+        + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
 
     public static final String MESSAGE_SUCCESS = "Displayed grades.";
-    public static final String MESSAGE_COURSE_REQUIRED = "Please specify a course code. Example: listgrades c/CS2103T";
     public static final String MESSAGE_COURSE_NOT_FOUND = "Course %1$s not found.";
     public static final String MESSAGE_INVALID_ASSESSMENT_INDEX = "The assessment index provided is invalid.";
 
@@ -49,8 +46,11 @@ public class ListGradesCommand extends Command {
     private final Index assessmentIndex;
 
     /**
-     * Retrieves the filtered grades based on the filter type.
-     */
+        * Constructs a ListGradesCommand with the specified filter type and values.
+        * @param filterType      the type of filter ("student", "course", or "courseassessment")
+        * @param filterValue1    the value for the filter (student ID or course code)
+        * @param assessmentIndex the index of the assessment (only used for "courseassessment" filter type)
+    */
     public ListGradesCommand(String filterType, String filterValue1, Index assessmentIndex) {
         this.filterType = filterType;
 
@@ -76,6 +76,9 @@ public class ListGradesCommand extends Command {
         ObservableList<Grade> grades = getFilteredGrades(model);
 
         if (grades.isEmpty()) {
+            model.updateFilteredGradeList(grade -> false);
+            model.setCurrentCourseForDisplay(java.util.Optional.empty());
+            model.setDisplayMode(DisplayMode.GRADES);
             return new CommandResult("No grades found.");
         }
 
@@ -101,8 +104,8 @@ public class ListGradesCommand extends Command {
                 .collect(Collectors.toList());
 
             if (courseAssessments.isEmpty()
-                || assessmentIndex == null
-                || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
+                    || assessmentIndex == null
+                    || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
                 throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
             }
 
@@ -119,73 +122,6 @@ public class ListGradesCommand extends Command {
         }
     }
 
-    /**
-     * Groups the grades by course and then by assessment.
-     */
-    private Map<String, Map<String, List<Grade>>> groupGradesByCourseAndAssessment(ObservableList<Grade> grades) {
-        return grades.stream()
-                .collect(Collectors.groupingBy(grade -> grade.getCourseCode().toUpperCase(),
-                        Collectors.groupingBy(grade -> grade.getAssessmentName().toString())));
-    }
-
-    /**
-     * Builds the output for each course, iterating over the assessments.
-     */
-    private String buildGradesByCourseOutput(String courseCode, Map<String, List<Grade>> assessmentsForCourse,
-            ObservableList<Assessment> assessments, Set<String> printedCourses) {
-        StringBuilder sb = new StringBuilder();
-
-        if (printedCourses.contains(courseCode.toUpperCase())) {
-            return "";
-        }
-
-        printedCourses.add(courseCode.toUpperCase());
-        sb.append("\nCourse: ").append(courseCode).append("\n");
-
-        int assessmentIndex = 1;
-
-        for (Assessment currentAssessment : assessments) {
-            if (!currentAssessment.getCourseCode().equalsIgnoreCase(courseCode)) {
-                continue;
-            }
-
-            String assessmentName = currentAssessment.getAssessmentName().toString();
-            List<Grade> courseGrades = assessmentsForCourse.get(assessmentName);
-
-            if (courseGrades != null && !courseGrades.isEmpty()) {
-                sb.append(generateAssessmentOutput(assessmentName, assessmentIndex, courseGrades, currentAssessment));
-            }
-
-            assessmentIndex++;
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * Generates the output for a specific assessment.
-     */
-    private String generateAssessmentOutput(String assessmentName, int assessmentIndex,
-            List<Grade> courseGrades, Assessment assessment) {
-        StringBuilder sb = new StringBuilder();
-
-        MaxScore maxScore = assessment.getMaxScore();
-
-        sb.append("  Assessment: ").append(assessmentName)
-                .append(" (Max Score: ").append(maxScore).append(")")
-                .append(" (Index: ").append(assessmentIndex).append(")\n");
-
-        int studentIndex = 1;
-        for (Grade grade : courseGrades) {
-            sb.append(studentIndex).append(".    Student ID: ").append(grade.getStudentId())
-                    .append(", Grade: ").append(grade.getScore()).append("\n");
-            studentIndex++;
-        }
-
-        sb.append("\n");
-        return sb.toString();
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -196,7 +132,7 @@ public class ListGradesCommand extends Command {
         }
         ListGradesCommand otherCommand = (ListGradesCommand) other;
         return filterType.equalsIgnoreCase(otherCommand.filterType)
-                && filterValue1.equals(otherCommand.filterValue1)
-                && java.util.Objects.equals(assessmentIndex, otherCommand.assessmentIndex);
+            && filterValue1.equals(otherCommand.filterValue1)
+            && java.util.Objects.equals(assessmentIndex, otherCommand.assessmentIndex);
     }
 }
