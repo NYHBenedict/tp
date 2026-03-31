@@ -92,33 +92,33 @@ public class ListGradesCommand extends Command {
 
     private ObservableList<Grade> getFilteredGrades(Model model) throws CommandException {
         switch (filterType.toLowerCase()) {
-            case "student":
-                return model.getGradesByStudentId(filterValue1);
+        case "student":
+            return model.getGradesByStudentId(filterValue1);
 
-            case "course":
-                return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
+        case "course":
+            return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
 
-            case "courseassessment":
-                List<Assessment> courseAssessments = model.getAssessmentList().stream()
-                    .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(filterValue1))
-                    .collect(Collectors.toList());
+        case "courseassessment":
+            List<Assessment> courseAssessments = model.getAssessmentList().stream()
+                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(filterValue1))
+                .collect(Collectors.toList());
 
-                if (courseAssessments.isEmpty()
+            if (courseAssessments.isEmpty()
                     || assessmentIndex == null
                     || assessmentIndex.getZeroBased() >= courseAssessments.size()) {
-                    throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
-                }
+                throw new CommandException(MESSAGE_INVALID_ASSESSMENT_INDEX);
+            }
 
-                Assessment selectedAssessment = courseAssessments.get(assessmentIndex.getZeroBased());
-                String storedCourseCode = selectedAssessment.getCourseCode();
-                String assessmentName = selectedAssessment.getAssessmentName().toString();
+            Assessment selectedAssessment = courseAssessments.get(assessmentIndex.getZeroBased());
+            String storedCourseCode = selectedAssessment.getCourseCode();
+            String assessmentName = selectedAssessment.getAssessmentName().toString();
 
-                return FXCollections.observableArrayList(
-                    model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
+            return FXCollections.observableArrayList(
+                model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
 
-            default:
-                throw new IllegalArgumentException(
-                    "Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
+        default:
+            throw new IllegalArgumentException(
+                "Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
         }
     }
 
