@@ -81,6 +81,8 @@ Examples:
 * `addcourse c/CS2103T`
 * `addcourse c/CS2103T, CS2101, CS2102`
 
+![Example of AddCourse](images/CourseCommands/AddCourse.png)
+
 
 ### Listing all courses: `listcourses`
 
@@ -90,6 +92,8 @@ Format: `listcourses`
 
 Examples:
 * `listcourses`
+
+![Example of ListCourses](images/CourseCommands/ListCourses.png)
 
 
 ### Removing a course: `removecourse`
@@ -103,6 +107,8 @@ Example:
 * `removecourse c/CS2103T, cs2102`
 
 > Removing a course also removes all students and assessments associated with that course.
+
+![Example of RemoveCourse](images/CourseCommands/RemoveCourse.png)
 
 
 ---
