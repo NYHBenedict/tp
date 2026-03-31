@@ -104,16 +104,6 @@ public class AddGradeCommandParserTest {
     }
 
     @Test
-    public void parse_invalidStudentIndex_failure() {
-        String userInput = " " + PREFIX_COURSE_CODE + "CS2103T "
-                + PREFIX_STUDENT_ID + "A!123456X "
-                + PREFIX_ASSESSMENT + "0 "
-                + PREFIX_GRADE + "9";
-
-        assertParseFailure(parser, userInput, ParserUtil.MESSAGE_INVALID_INDEX);
-    }
-
-    @Test
     public void parse_invalidAssessmentIndex_failure() {
         String userInput = " " + PREFIX_COURSE_CODE + "CS2103T "
                 + PREFIX_STUDENT_ID + "A0123456X "
@@ -172,7 +162,7 @@ public class AddGradeCommandParserTest {
     @Test
     public void parse_multipleGradeValues_failure() {
         String userInput = " " + PREFIX_COURSE_CODE + "CS2103T "
-                + PREFIX_STUDENT + "1 "
+                + PREFIX_STUDENT_ID + "A0123456X "
                 + PREFIX_ASSESSMENT + "1 "
                 + PREFIX_GRADE + "9 "
                 + PREFIX_GRADE + "10";
