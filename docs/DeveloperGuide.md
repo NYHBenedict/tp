@@ -54,9 +54,11 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `addgrade c/CS2103T id/A0123456B a/Assignment1 s/95` to record a student's grade for an assessment.
+The _Sequence Diagram_ below shows how the main components interact when the user executes the command `delete 1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
+
+This diagram stays at the component level. The parser and command objects involved in the deletion flow are intentionally abstracted away here and are described in the `Logic` section below.
 
 Each of the four main components (also shown in the diagram above),
 
@@ -94,19 +96,17 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("addgrade c/CS2103T id/A0123456B as/Assignment1 g/95")` API call as an example.
+The diagram focuses on the core collaborators in `Logic` together with a representative subset of concrete commands. Additional command classes follow the same `Command` inheritance structure and are omitted to keep the diagram readable.
 
-![Interactions Inside the Logic Component for the `addgrade` Command](images/DeleteSequenceDiagram.png)
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` as an example.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `AddGradeCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</div>
+![Interactions Inside the Logic Component for the `delete` Command](images/DeleteSequenceDiagram.png)
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `AddGradeCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `AddGradeCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to add a grade for a student in a course).<br>
-   Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
+1. When `Logic` is called upon to execute a command, `LogicManager` delegates parsing to `AddressBookParser`, which selects the parser matching the command word (for example, `DeleteCommandParser`).
+1. The parser returns a `Command` object. For `delete 1`, this is a `DeleteCommand`.
+1. The command is then executed with the `Model`. In the `delete` flow, the command retrieves the currently displayed person list, validates the requested index, and deletes the selected `Person` when the index is valid.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
@@ -115,8 +115,10 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 How the parsing works:
 
-- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddGradeCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddGradeCommand`) which the `AddressBookParser` returns back as a `Command` object.
-- All `XYZCommandParser` classes (e.g., `AddGradeCommandParser`, `AddStudentCommandParser`, `ListStudentsCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+- `AddressBookParser` acts as the entry point for parsing. It inspects the command word and delegates to a concrete parser such as `DeleteCommandParser`, `AddCourseCommandParser`, `AddAssessmentCommandParser`, or `ExportCourseCommandParser`.
+- Concrete parser classes implement the common `Parser<T>` interface and each creates exactly one matching `Command` subtype.
+- Many parsers reuse shared helpers such as `ArgumentTokenizer`, `ArgumentMultimap`, `ParserUtil`, `CliSyntax`, and `Prefix` to tokenize prefixed arguments, validate them, and construct the target command object.
+- Some simple commands, such as `clear`, `list`, `help`, `exit`, and `viewall`, are instantiated directly by `AddressBookParser` and therefore do not appear in the parser class diagram.
 
 ### Model component
 
