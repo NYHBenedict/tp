@@ -29,18 +29,17 @@ import seedu.address.model.grade.Grade;
 import seedu.address.model.person.Person;
 import seedu.address.model.student.Student;
 import seedu.address.model.student.StudentId;
-import seedu.address.testutil.PersonBuilder;
 
 public class RemoveGradeCommandTest {
 
     @Test
     public void constructor_nullCourseCode_throwsNullPointerException() {
         assertThrows(NullPointerException.class, (
-            ) -> new RemoveGradeCommand(null, Index.fromOneBased(1), Index.fromOneBased(1)));
+            ) -> new RemoveGradeCommand(null, "A1234567X", Index.fromOneBased(1)));
     }
 
     @Test
-    public void constructor_nullStudentIndex_throwsNullPointerException() {
+    public void constructor_nullStudentId_throwsNullPointerException() {
         assertThrows(NullPointerException.class, (
             ) -> new RemoveGradeCommand("CS2103T", null, Index.fromOneBased(1)));
     }
@@ -48,75 +47,75 @@ public class RemoveGradeCommandTest {
     @Test
     public void constructor_nullAssessmentIndex_throwsNullPointerException() {
         assertThrows(NullPointerException.class, (
-            ) -> new RemoveGradeCommand("CS2103T", Index.fromOneBased(1), null));
+            ) -> new RemoveGradeCommand("CS2103T", "A1234567X", null));
     }
 
     @Test
     public void execute_validInputs_removeSuccessful() throws Exception {
-        Person alice = new PersonBuilder()
-                .withName("Alice Pauline")
-                .withPhone("94351253")
-                .withEmail("alice@gmail.com")
-                .withAddress("123, Jurong West Ave 6, #08-111")
-                .build();
+        Course course = new Course("CS2103T");
+        course.addStudent(new Student("A1234567X", "Alice"));
 
         Assessment quiz = new Assessment("CS2103T",
                 new AssessmentName("Quiz 1"),
                 new MaxScore("10"));
 
         Grade existingGrade = new Grade(
-                new StudentId("alice@gmail.com"),
+                new StudentId("A1234567X"),
                 new AssessmentName("Quiz 1"),
                 "CS2103T");
 
-        ModelStubWithGrade modelStub = new ModelStubWithGrade(alice, quiz, existingGrade);
+        ModelStubWithGrade modelStub = new ModelStubWithGrade(course, quiz, existingGrade);
 
         RemoveGradeCommand command = new RemoveGradeCommand("cs2103t",
-                Index.fromOneBased(1), Index.fromOneBased(1));
+                "A1234567X", Index.fromOneBased(1));
 
         CommandResult result = command.execute(modelStub);
 
         assertEquals(String.format(RemoveGradeCommand.MESSAGE_SUCCESS,
-                "alice@gmail.com", "Quiz 1", "CS2103T"), result.getFeedbackToUser());
+                "A1234567X", "Quiz 1", "CS2103T"), result.getFeedbackToUser());
         assertEquals(existingGrade, modelStub.removedGrade);
     }
 
     @Test
-    public void execute_invalidStudentIndex_throwsCommandException() {
-        Person alice = new PersonBuilder().build();
+    public void execute_invalidStudentId_throwsCommandException() {
+        Course course = new Course("CS2103T");
+        course.addStudent(new Student("A1234567X", "Alice"));
+
         Assessment quiz = new Assessment("CS2103T",
                 new AssessmentName("Quiz 1"),
                 new MaxScore("10"));
+
         Grade existingGrade = new Grade(
-                new StudentId("amy@gmail.com"),
+                new StudentId("A1234567X"),
                 new AssessmentName("Quiz 1"),
                 "CS2103T");
 
-        ModelStubWithGrade modelStub = new ModelStubWithGrade(alice, quiz, existingGrade);
+        ModelStubWithGrade modelStub = new ModelStubWithGrade(course, quiz, existingGrade);
         RemoveGradeCommand command = new RemoveGradeCommand("CS2103T",
-                Index.fromOneBased(2), Index.fromOneBased(1));
+                "A2345678Y", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
-                RemoveGradeCommand.MESSAGE_INVALID_STUDENT_INDEX, (
+                RemoveGradeCommand.MESSAGE_INVALID_STUDENT_ID, (
                     ) -> command.execute(modelStub));
     }
 
     @Test
     public void execute_invalidCourseCode_throwsCommandException() {
-        Person alice = new PersonBuilder()
-                .withEmail("alice@gmail.com")
-                .build();
+        Course course = new Course("CS2103T");
+        course.addStudent(new Student("A1234567X", "Alice"));
+
         Assessment quiz = new Assessment("CS2103T",
                 new AssessmentName("Quiz 1"),
                 new MaxScore("10"));
+
         Grade existingGrade = new Grade(
-                new StudentId("alice@gmail.com"),
+                new StudentId("A1234567X"),
                 new AssessmentName("Quiz 1"),
                 "CS2103T");
 
-        ModelStubWithGrade modelStub = new ModelStubWithGrade(alice, quiz, existingGrade);
+        ModelStubWithGrade modelStub = new ModelStubWithGrade(course, quiz, existingGrade);
         RemoveGradeCommand command = new RemoveGradeCommand("CS9999",
-                Index.fromOneBased(1), Index.fromOneBased(1));
+                "A1234567X", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
                 RemoveGradeCommand.MESSAGE_INVALID_COURSE_CODE, (
@@ -125,20 +124,21 @@ public class RemoveGradeCommandTest {
 
     @Test
     public void execute_invalidAssessmentIndex_throwsCommandException() {
-        Person alice = new PersonBuilder()
-                .withEmail("alice@gmail.com")
-                .build();
+        Course course = new Course("CS2103T");
+        course.addStudent(new Student("A1234567X", "Alice"));
+
         Assessment quiz = new Assessment("CS2103T",
                 new AssessmentName("Quiz 1"),
                 new MaxScore("10"));
+
         Grade existingGrade = new Grade(
-                new StudentId("alice@gmail.com"),
+                new StudentId("A1234567X"),
                 new AssessmentName("Quiz 1"),
                 "CS2103T");
 
-        ModelStubWithGrade modelStub = new ModelStubWithGrade(alice, quiz, existingGrade);
+        ModelStubWithGrade modelStub = new ModelStubWithGrade(course, quiz, existingGrade);
         RemoveGradeCommand command = new RemoveGradeCommand("CS2103T",
-                Index.fromOneBased(1), Index.fromOneBased(2));
+                "A1234567X", Index.fromOneBased(2));
 
         assertThrows(CommandException.class,
                 RemoveGradeCommand.MESSAGE_INVALID_ASSESSMENT_INDEX, (
@@ -147,16 +147,16 @@ public class RemoveGradeCommandTest {
 
     @Test
     public void execute_gradeNotFound_throwsCommandException() {
-        Person alice = new PersonBuilder()
-                .withEmail("alice@gmail.com")
-                .build();
+        Course course = new Course("CS2103T");
+        course.addStudent(new Student("A1234567X", "Alice"));
+
         Assessment quiz = new Assessment("CS2103T",
                 new AssessmentName("Quiz 1"),
                 new MaxScore("10"));
 
-        ModelStubWithoutGrade modelStub = new ModelStubWithoutGrade(alice, quiz);
+        ModelStubWithoutGrade modelStub = new ModelStubWithoutGrade(course, quiz);
         RemoveGradeCommand command = new RemoveGradeCommand("CS2103T",
-                Index.fromOneBased(1), Index.fromOneBased(1));
+                "A1234567X", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
                 RemoveGradeCommand.MESSAGE_GRADE_NOT_FOUND, (
@@ -165,15 +165,15 @@ public class RemoveGradeCommandTest {
 
     @Test
     public void equals() {
-        RemoveGradeCommand firstCommand = new RemoveGradeCommand("CS2103T", Index.fromOneBased(1),
+        RemoveGradeCommand firstCommand = new RemoveGradeCommand("CS2103T", "A1234567X",
                 Index.fromOneBased(1));
-        RemoveGradeCommand firstCommandCopy = new RemoveGradeCommand("cs2103t", Index.fromOneBased(1),
+        RemoveGradeCommand firstCommandCopy = new RemoveGradeCommand("cs2103t", "A1234567X",
                 Index.fromOneBased(1));
-        RemoveGradeCommand secondCommand = new RemoveGradeCommand("CS2103T", Index.fromOneBased(2),
+        RemoveGradeCommand secondCommand = new RemoveGradeCommand("CS2103T", "A2345678Y",
                 Index.fromOneBased(1));
-        RemoveGradeCommand differentAssessmentCommand = new RemoveGradeCommand("CS2103T", Index.fromOneBased(1),
+        RemoveGradeCommand differentAssessmentCommand = new RemoveGradeCommand("CS2103T", "A1234567X",
                 Index.fromOneBased(2));
-        RemoveGradeCommand differentCourseCommand = new RemoveGradeCommand("CS2101", Index.fromOneBased(1),
+        RemoveGradeCommand differentCourseCommand = new RemoveGradeCommand("CS2101", "A1234567X",
                 Index.fromOneBased(1));
 
         assertTrue(firstCommand.equals(firstCommand));
@@ -397,20 +397,28 @@ public class RemoveGradeCommandTest {
     }
 
     private class ModelStubWithGrade extends ModelStub {
-        private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final Course course;
         private final ObservableList<Assessment> assessments = FXCollections.observableArrayList();
         private final Grade existingGrade;
         private Grade removedGrade;
 
-        ModelStubWithGrade(Person person, Assessment assessment, Grade existingGrade) {
-            persons.add(person);
-            assessments.add(assessment);
+        ModelStubWithGrade(Course course, Assessment assessment, Grade existingGrade) {
+            this.course = course;
+            this.assessments.add(assessment);
             this.existingGrade = existingGrade;
         }
 
         @Override
-        public ObservableList<Person> getFilteredPersonList() {
-            return persons;
+        public boolean hasCourse(String courseCode) {
+            return course.getCourseCode().equalsIgnoreCase(courseCode);
+        }
+
+        @Override
+        public Optional<Course> getCourse(String courseCode) {
+            if (course.getCourseCode().equalsIgnoreCase(courseCode)) {
+                return Optional.of(course);
+            }
+            return Optional.empty();
         }
 
         @Override
@@ -432,17 +440,25 @@ public class RemoveGradeCommandTest {
     }
 
     private class ModelStubWithoutGrade extends ModelStub {
-        private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private final Course course;
         private final ObservableList<Assessment> assessments = FXCollections.observableArrayList();
 
-        ModelStubWithoutGrade(Person person, Assessment assessment) {
-            persons.add(person);
-            assessments.add(assessment);
+        ModelStubWithoutGrade(Course course, Assessment assessment) {
+            this.course = course;
+            this.assessments.add(assessment);
         }
 
         @Override
-        public ObservableList<Person> getFilteredPersonList() {
-            return persons;
+        public boolean hasCourse(String courseCode) {
+            return course.getCourseCode().equalsIgnoreCase(courseCode);
+        }
+
+        @Override
+        public Optional<Course> getCourse(String courseCode) {
+            if (course.getCourseCode().equalsIgnoreCase(courseCode)) {
+                return Optional.of(course);
+            }
+            return Optional.empty();
         }
 
         @Override
