@@ -22,10 +22,8 @@ public class AddGradeCommandParserTest {
 
     @Test
     public void parse_invalidStudentId_failure() {
-        String userInput = " " + PREFIX_COURSE_CODE + "CS2103T "
-        + PREFIX_STUDENT_ID + "A12 "
-        + PREFIX_ASSESSMENT + "1 "
-        + PREFIX_GRADE + "9";
+        String userInput = " " + PREFIX_COURSE_CODE + "CS2103T " +
+        PREFIX_STUDENT_ID + "A12 " + PREFIX_ASSESSMENT + "1 " + PREFIX_GRADE + "9";
 
         assertParseFailure(parser, userInput, "❌ Invalid student ID. Example: id/A0123456X");
     }
@@ -33,9 +31,9 @@ public class AddGradeCommandParserTest {
     @Test
     public void parse_whitespaceOnlyPreamble_success() {
         String userInput = " \n \t " + PREFIX_COURSE_CODE + "CS2103T "
-                + PREFIX_STUDENT_ID + "A0123456X "
-                + PREFIX_ASSESSMENT + "1 "
-                + PREFIX_GRADE + "9";
+            + PREFIX_STUDENT_ID + "A0123456X "
+            + PREFIX_ASSESSMENT + "1 "
+            + PREFIX_GRADE + "9";
 
         AddGradeCommand expectedCommand = new AddGradeCommand("CS2103T",
                 "A0123456X", Index.fromOneBased(1), new Score("9"));
