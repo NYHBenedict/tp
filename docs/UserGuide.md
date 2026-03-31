@@ -219,6 +219,8 @@ Format: `listdetails c/COURSE_CODE`
 Example:
 * `listdetails c/CS2103T`
 
+![Example of ListDetails](images/CourseCommands/ListDetails.png)
+
 ### Exporting a course: `exportcourse`
 
 Exports course-related information.
