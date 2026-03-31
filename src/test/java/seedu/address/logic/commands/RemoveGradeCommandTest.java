@@ -34,20 +34,20 @@ public class RemoveGradeCommandTest {
 
     @Test
     public void constructor_nullCourseCode_throwsNullPointerException() {
-        assertThrows(NullPointerException.class,
-                () -> new RemoveGradeCommand(null, "A1234567X", Index.fromOneBased(1)));
+        assertThrows(NullPointerException.class, (
+            ) -> new RemoveGradeCommand(null, "A1234567X", Index.fromOneBased(1)));
     }
 
     @Test
     public void constructor_nullStudentId_throwsNullPointerException() {
-        assertThrows(NullPointerException.class,
-                () -> new RemoveGradeCommand("CS2103T", null, Index.fromOneBased(1)));
+        assertThrows(NullPointerException.class, (
+            ) -> new RemoveGradeCommand("CS2103T", null, Index.fromOneBased(1)));
     }
 
     @Test
     public void constructor_nullAssessmentIndex_throwsNullPointerException() {
-        assertThrows(NullPointerException.class,
-                () -> new RemoveGradeCommand("CS2103T", "A1234567X", null));
+        assertThrows(NullPointerException.class, (
+            ) -> new RemoveGradeCommand("CS2103T", "A1234567X", null));
     }
 
     @Test
@@ -95,8 +95,8 @@ public class RemoveGradeCommandTest {
                 "A2345678Y", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
-                RemoveGradeCommand.MESSAGE_INVALID_STUDENT_ID,
-                () -> command.execute(modelStub));
+                RemoveGradeCommand.MESSAGE_INVALID_STUDENT_ID, (
+                    ) -> command.execute(modelStub));
     }
 
     @Test
@@ -118,8 +118,8 @@ public class RemoveGradeCommandTest {
                 "A1234567X", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
-                RemoveGradeCommand.MESSAGE_INVALID_COURSE_CODE,
-                () -> command.execute(modelStub));
+                RemoveGradeCommand.MESSAGE_INVALID_COURSE_CODE, (
+                    ) -> command.execute(modelStub));
     }
 
     @Test
@@ -141,8 +141,8 @@ public class RemoveGradeCommandTest {
                 "A1234567X", Index.fromOneBased(2));
 
         assertThrows(CommandException.class,
-                RemoveGradeCommand.MESSAGE_INVALID_ASSESSMENT_INDEX,
-                () -> command.execute(modelStub));
+                RemoveGradeCommand.MESSAGE_INVALID_ASSESSMENT_INDEX, (
+                    ) -> command.execute(modelStub));
     }
 
     @Test

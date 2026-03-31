@@ -27,10 +27,10 @@ public class RemoveGradeCommandParserTest {
             Index.fromOneBased(2));
 
         assertParseSuccess(parser, userInput, expectedCommand);
-        }
+     }
 
-     @Test
-     public void parse_whitespaceOnlyPreamble_success() {
+    @Test
+    public void parse_whitespaceOnlyPreamble_success() {
         String userInput = " \n \t " + PREFIX_COURSE_CODE + "CS2103T "
             + PREFIX_STUDENT_ID + "A0123456X "
             + PREFIX_ASSESSMENT + "1";
@@ -39,7 +39,7 @@ public class RemoveGradeCommandParserTest {
         Index.fromOneBased(1));
 
         assertParseSuccess(parser, userInput, expectedCommand);
-}
+    }
 
     @Test
     public void parse_missingCourseCode_failure() {
@@ -47,7 +47,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
         String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
-}
+    }
 
     @Test
     public void parse_missingStudentId_failure() {
@@ -55,7 +55,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
         String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
-}
+    }
 
     @Test
     public void parse_missingAssessmentIndex_failure() {
@@ -73,7 +73,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
-}
+    }
 
     @Test
     public void parse_invalidCourseCode_failure() {
@@ -83,7 +83,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 "❌ Invalid course code. Example: CS2103T");
-        }
+    }
 
     @Test
     public void parse_invalidStudentId_failure() {
@@ -93,7 +93,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 "❌ Invalid student ID. Example: id/A0123456X");
-        }
+    }
 
     @Test
     public void parse_invalidAssessmentIndex_failure() {
@@ -113,7 +113,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_COURSE_CODE));
-        }
+    }
 
     @Test
     public void parse_multipleStudentValues_failure() {
@@ -124,7 +124,7 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_STUDENT_ID));
-        }
+    }
 
     @Test
     public void parse_multipleAssessmentValues_failure() {
@@ -135,5 +135,5 @@ public class RemoveGradeCommandParserTest {
 
         assertParseFailure(parser, userInput,
             Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ASSESSMENT));
-        }
+    }
 }
