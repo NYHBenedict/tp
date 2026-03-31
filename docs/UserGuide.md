@@ -73,14 +73,36 @@ Format: `help`
 
 ### Adding a course: `addcourse`
 
+Adds one or more courses to the database.
+
+Format: `addcourse c/COURSE_CODE[,COURSE_CODE,...]`
+
+Examples:
+* `addcourse c/CS2103T`
+* `addcourse c/CS2103T, CS2101, CS2102`
 
 
 ### Listing all courses: `listcourses`
 
+Lists all existing courses.
+
+Format: `listcourses`
+
+Examples:
+* `listcourses`
 
 
 ### Removing a course: `removecourse`
 
+Removes one or more courses using course code.
+
+Format: `removecourse c/COURSE_CODE[,COURSE_CODE,...]`
+
+Example:
+* `removecourse c/CS2103T`
+* `removecourse c/CS2103T, cs2102`
+
+> Removing a course also removes all students and assessments associated with that course.
 
 
 ---
@@ -184,7 +206,7 @@ Examples:
 
 ### Viewing detailed course information: `listdetails`
 
-Displays detailed information for a course.
+Displays assessments and students information for a course.
 
 Format: `listdetails c/COURSE_CODE`
 
