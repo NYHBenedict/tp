@@ -27,7 +27,7 @@ public class RemoveGradeCommandParserTest {
             Index.fromOneBased(2));
 
         assertParseSuccess(parser, userInput, expectedCommand);
-     }
+    }
 
     @Test
     public void parse_whitespaceOnlyPreamble_success() {
@@ -36,7 +36,7 @@ public class RemoveGradeCommandParserTest {
             + PREFIX_ASSESSMENT + "1";
 
         RemoveGradeCommand expectedCommand = new RemoveGradeCommand("CS2103T", "A0123456X",
-        Index.fromOneBased(1));
+            Index.fromOneBased(1));
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -46,7 +46,7 @@ public class RemoveGradeCommandParserTest {
         String userInput = " " + PREFIX_STUDENT_ID + "A0123456X " + PREFIX_ASSESSMENT + "1";
 
         assertParseFailure(parser, userInput,
-        String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class RemoveGradeCommandParserTest {
         String userInput = " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1";
 
         assertParseFailure(parser, userInput,
-        String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveGradeCommand.MESSAGE_USAGE));
     }
 
     @Test

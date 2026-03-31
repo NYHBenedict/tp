@@ -159,8 +159,8 @@ public class RemoveGradeCommandTest {
                 "A1234567X", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
-                RemoveGradeCommand.MESSAGE_GRADE_NOT_FOUND,
-                () -> command.execute(modelStub));
+                RemoveGradeCommand.MESSAGE_GRADE_NOT_FOUND, (
+                    ) -> command.execute(modelStub));
     }
 
     @Test
