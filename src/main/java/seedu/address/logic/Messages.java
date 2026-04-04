@@ -32,7 +32,8 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_GRADE = "This grade already exists for the student and assessment.";
     public static final String MESSAGE_SCORE_EXCEEDS_MAX = "Score cannot be more than the assessment max score.";
 
-    public static final String MESSAGE_REMOVE_GRADE_SUCCESS = "Removed grade: Student ID: %1$s, Assessment name: %2$s in Course: %3$s";
+    public static final String MESSAGE_REMOVE_GRADE_SUCCESS =
+        "Removed grade: Student ID: %1$s, Assessment name: %2$s in Course: %3$s";
     public static final String MESSAGE_GRADE_NOT_FOUND = "Grade not found.";
 
     public static final String MESSAGE_REMOVE_ASSESSMENT_SUCCESS = "Removed assessment: %1$s";

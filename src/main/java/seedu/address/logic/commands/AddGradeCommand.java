@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.stream.Collectors;
 
