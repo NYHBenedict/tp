@@ -321,6 +321,12 @@ public class AddAssessmentCommandTest {
             requireNonNull(courseCode);
             return Optional.empty();
         }
+
+        @Override
+        public boolean hasCourse(String courseCode) {
+            requireNonNull(courseCode);
+            return false;
+        }
     }
 
     /**
@@ -343,6 +349,12 @@ public class AddAssessmentCommandTest {
         public boolean hasAssessment(Assessment assessment) {
             requireNonNull(assessment);
             return this.assessment.isSameAssessment(assessment);
+        }
+
+        @Override
+        public boolean hasCourse(String courseCode) {
+            requireNonNull(courseCode);
+            return true;
         }
     }
 
@@ -368,6 +380,12 @@ public class AddAssessmentCommandTest {
         public void addAssessment(Assessment assessment) {
             requireNonNull(assessment);
             assessmentsAdded.add(assessment);
+        }
+
+        @Override
+        public boolean hasCourse(String courseCode) {
+            requireNonNull(courseCode);
+            return true;
         }
     }
 }
