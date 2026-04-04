@@ -6,9 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,9 +97,8 @@ public class ListGradesCommand extends Command {
             return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
 
         case "courseassessment":
-            List<Assessment> courseAssessments = model.getAssessmentList().stream()
-                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(filterValue1))
-                .collect(Collectors.toList());
+            ObservableList<Assessment> courseAssessments =
+                model.getAssessmentsForCourseInDisplayOrder(filterValue1);
 
             if (courseAssessments.isEmpty()
                     || assessmentIndex == null
