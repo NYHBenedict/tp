@@ -19,6 +19,12 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_INVALID_COURSE_CODE = "Invalid course code.";
+    public static final String MESSAGE_COURSE_NOT_FOUND = "Course %1$s not found.";
+    public static final String MESSAGE_DUPLICATE_ASSESSMENT = "This assessment already exists.";
+    public static final String MESSAGE_SIMILAR_ASSESSMENT = "A similar assessment already exists: %1$s";
+    public static final String MESSAGE_INVALID_ASSESSMENT_NAME = "Invalid assessment name.";
+    public static final String MESSAGE_INVALID_MAX_SCORE = "Invalid max score.";
+    public static final String MESSAGE_ADD_ASSESSMENT_SUCCESS = "New assessment added: %1$s";
 
     /**
      * Returns an error message indicating the duplicate prefixes.

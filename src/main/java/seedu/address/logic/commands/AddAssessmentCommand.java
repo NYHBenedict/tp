@@ -26,11 +26,6 @@ public class AddAssessmentCommand extends Command {
             + "an/Midterm "
             + "m/100";
 
-    public static final String MESSAGE_SUCCESS = "New assessment added: %1$s";
-    public static final String MESSAGE_DUPLICATE_ASSESSMENT = "This assessment already exists.";
-    public static final String MESSAGE_COURSE_NOT_FOUND = "Course %1$s not found.";
-    public static final String MESSAGE_SIMILAR_ASSESSMENT = "A similar assessment already exists: %1$s";
-
     private final String courseCode;
     private final AssessmentName assessmentName;
     private final MaxScore maxScore;
@@ -58,13 +53,13 @@ public class AddAssessmentCommand extends Command {
         requireNonNull(model);
 
         if (!model.hasCourse(courseCode)) {
-            throw new CommandException(String.format(MESSAGE_COURSE_NOT_FOUND, courseCode));
+            throw new CommandException(String.format(Messages.MESSAGE_COURSE_NOT_FOUND, courseCode));
         }
 
         Assessment toAdd = new Assessment(courseCode, assessmentName, maxScore);
 
         if (model.hasAssessment(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_ASSESSMENT);
+            throw new CommandException(Messages.MESSAGE_DUPLICATE_ASSESSMENT);
         }
 
         for (Assessment existing : model.getAssessmentList()) {
@@ -74,13 +69,13 @@ public class AddAssessmentCommand extends Command {
 
                 if (!existingName.equals(newName) && areLikelyTypos(existingName, newName)) {
                     throw new CommandException(String.format(
-                            MESSAGE_SIMILAR_ASSESSMENT, existing.getAssessmentName()));
+                            Messages.MESSAGE_SIMILAR_ASSESSMENT, existing.getAssessmentName()));
                 }
             }
         }
 
         model.addAssessment(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
+        return new CommandResult(String.format(Messages.MESSAGE_ADD_ASSESSMENT_SUCCESS, toAdd));
     }
 
     /**
