@@ -2,9 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
@@ -46,10 +43,8 @@ public class RemoveAssessmentCommand extends Command {
         requireNonNull(model);
 
         // Get the list of assessments for the given course code
-        ObservableList<Assessment> assessments = model.getAssessmentList();
-        List<Assessment> filteredAssessments = assessments.stream()
-                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode))
-                .collect(Collectors.toList());
+        ObservableList<Assessment> filteredAssessments =
+            model.getAssessmentsForCourseInDisplayOrder(courseCode);
 
         if (filteredAssessments.isEmpty()) {
             throw new CommandException(Messages.MESSAGE_INVALID_COURSE);

@@ -2,9 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -64,9 +62,8 @@ public class AddGradeCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_ID);
         }
 
-        List<Assessment> courseAssessments = model.getAssessmentList().stream()
-                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode))
-                .collect(Collectors.toList());
+        ObservableList<Assessment> courseAssessments =
+            model.getAssessmentsForCourseInDisplayOrder(courseCode);
 
         if (assessmentIndex.getZeroBased() >= courseAssessments.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_ASSESSMENT_INDEX);
