@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
@@ -87,10 +89,24 @@ public class HelpWindow extends UiPart<Stage> {
     @FXML
     private void openUserGuide() {
         try {
+            if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                showUserGuideOpenError();
+                return;
+            }
+
             Desktop.getDesktop().browse(new URI(USERGUIDE_URL));
         } catch (Exception e) {
             logger.warning("Failed to open user guide: " + e.getMessage());
+            showUserGuideOpenError();
         }
+    }
+
+    private void showUserGuideOpenError() {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Unable to Open User Guide");
+        alert.setHeaderText("Could not open the browser.");
+        alert.setContentText("Please open this link manually:\n" + USERGUIDE_URL);
+        alert.showAndWait();
     }
 
     private void buildHelpContent() {

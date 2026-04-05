@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.logic.Messages;
 import seedu.address.model.DisplayMode;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -26,7 +27,7 @@ import seedu.address.model.student.Student;
 
 public class ListAssessmentsCommandTest {
 
-    public static final String MESSAGE_SUCCESS = "Listed all assessments";
+    public static final String MESSAGE_SUCCESS = Messages.MESSAGE_LIST_ASSESSMENTS_SUCCESS;
 
     @Test
     public void execute_noAssessments_returnsNoAssessmentsMessage() throws Exception {
@@ -46,7 +47,7 @@ public class ListAssessmentsCommandTest {
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(Messages.MESSAGE_LIST_ASSESSMENTS_SUCCESS, result.getFeedbackToUser());
         assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
         assertEquals(assessments.size(), modelStub.getFilteredAssessmentList().size());
         assertTrue(modelStub.getFilteredAssessmentList().containsAll(assessments));
@@ -61,7 +62,7 @@ public class ListAssessmentsCommandTest {
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        assertEquals(ListAssessmentsCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(Messages.MESSAGE_LIST_ASSESSMENTS_SUCCESS, result.getFeedbackToUser());
         assertEquals(DisplayMode.ASSESSMENTS, modelStub.getDisplayMode());
         assertEquals(assessments.size(), modelStub.getFilteredAssessmentList().size());
         assertTrue(modelStub.getFilteredAssessmentList().containsAll(assessments));
