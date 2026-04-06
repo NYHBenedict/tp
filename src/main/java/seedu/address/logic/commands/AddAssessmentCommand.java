@@ -48,6 +48,23 @@ public class AddAssessmentCommand extends Command {
         this.maxScore = new MaxScore(maxScore);
     }
 
+    /**
+     * Constructs an AddAssessmentCommand with the specified course code, assessment
+     * name, and max score.
+     * @param courseCode     the course code
+     * @param assessmentName the assessment name
+     * @param maxScore       the maximum score
+     */
+    public AddAssessmentCommand(String courseCode, AssessmentName assessmentName, MaxScore maxScore) {
+        requireNonNull(courseCode);
+        requireNonNull(assessmentName);
+        requireNonNull(maxScore);
+
+        this.courseCode = courseCode;
+        this.assessmentName = assessmentName;
+        this.maxScore = maxScore;
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
