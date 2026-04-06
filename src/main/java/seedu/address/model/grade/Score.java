@@ -3,6 +3,7 @@ package seedu.address.model.grade;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -72,7 +73,7 @@ public class Score {
 
     @Override
     public String toString() {
-        return value;
+        return String.format("%.1f", Double.parseDouble(value));
     }
 
     @Override

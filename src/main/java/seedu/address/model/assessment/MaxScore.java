@@ -3,6 +3,7 @@ package seedu.address.model.assessment;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -52,7 +53,7 @@ public class MaxScore {
 
     @Override
     public String toString() {
-        return value;
+        return String.format("%.1f", Double.parseDouble(value));
     }
 
     @Override
