@@ -114,6 +114,7 @@ Format: `addassessment c/COURSE_CODE an/ASSESSMENT_NAME m/MAX_SCORE`
 Examples:
 * `addassessment c/CS2103T an/Quiz 1 m/10`
 * `addassessment c/CS2103T an/Final Exam m/100`
+![Example of AddAssessment](images/AssessmentCommands/addassessmentCommand.png)
 
 ### Listing assessments: `listassessments`
 
@@ -126,6 +127,8 @@ Format:
 Examples:
 * `listassessments`
 * `listassessments c/CS2103T`
+![Example of ListAssessments](images/AssessmentCommands/listassessmentsCommand.png)
+![Example of ListAssessmentsCourseFilter](images/AssessmentCommands/listassessmentsfiltercourseCommand.png)
 
 ### Removing an assessment: `removeassessment`
 
@@ -137,6 +140,7 @@ Example:
 * `removeassessment c/CS2103T as/1`
 
 > Removing an assessment also removes all grades associated with that assessment.
+![Example of ListAssessment](images/AssessmentCommands/removeassessmentsCommand.png)
 
 ---
 
@@ -154,15 +158,7 @@ Examples:
 
 > The student must already be enrolled in the course.<br>
 > The score cannot exceed the assessment’s max score.
-
-### Removing a grade: `removegrade`
-
-Removes a grade for a student from a course assessment.
-
-Format: `removegrade c/COURSE_CODE id/STUDENT_ID as/ASSESSMENT_INDEX`
-
-Example:
-* `removegrade c/CS2103T id/A0123456X as/1`
+![Example of AddGrade](images/GradeCommands/addgradeCommand.png)
 
 ### Listing grades: `listgrades`
 
@@ -177,6 +173,17 @@ Examples:
 * `listgrades c/CS2103T`
 * `listgrades c/CS2103T as/1`
 * `listgrades id/A0123456X`
+![Example of ListGrades](images/GradeCommands/listgradesCommand.png)
+
+### Removing a grade: `removegrade`
+
+Removes a grade for a student from a course assessment.
+
+Format: `removegrade c/COURSE_CODE id/STUDENT_ID as/ASSESSMENT_INDEX`
+
+Example:
+* `removegrade c/CS2103T id/A0123456X as/1`
+![Example of RemoveGrades](images/GradeCommands/removeCommand.png)
 
 ---
 
