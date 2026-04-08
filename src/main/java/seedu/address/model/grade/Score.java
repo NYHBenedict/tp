@@ -72,7 +72,7 @@ public class Score {
 
     @Override
     public String toString() {
-        return value;
+        return String.format("%.1f", Double.parseDouble(value));
     }
 
     @Override
