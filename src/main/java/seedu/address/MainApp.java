@@ -182,7 +182,7 @@ public class MainApp extends Application {
         logger.info("Starting AddressBook " + MainApp.VERSION);
         ui.start(primaryStage);
 
-        if (startupWarningMessage != null && ui instanceof UiManager) { (
+            if (startupWarningMessage != null && ui instanceof UiManager) { (
                 (UiManager) ui).showStartupWarning(startupWarningMessage);
         }
     }
