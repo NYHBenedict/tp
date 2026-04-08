@@ -59,6 +59,10 @@ public class UiManager implements Ui {
         showAlertDialogAndWait(mainWindow.getPrimaryStage(), type, title, headerText, contentText);
     }
 
+    /**
+     * Shows a warning alert dialog with {@code title} and error message, {@code contentText}.
+     * @param contentText
+     */
     public void showStartupWarning(String contentText) {
         showAlertDialogAndWait(AlertType.WARNING,
                 "Data File Problem",

@@ -42,11 +42,12 @@ public class MainApp extends Application {
 
     private String startupWarningMessage;
 
-    protected Ui ui;
-    protected Logic logic;
-    protected Storage storage;
-    protected Model model;
     protected Config config;
+    protected Logic logic;
+    protected Model model;
+    protected Storage storage;
+    protected Ui ui;
+
 
     @Override
     public void init() throws Exception {
@@ -182,8 +183,8 @@ public class MainApp extends Application {
         logger.info("Starting AddressBook " + MainApp.VERSION);
         ui.start(primaryStage);
 
-        if (startupWarningMessage != null && ui instanceof UiManager) {
-            ((UiManager) ui).showStartupWarning(startupWarningMessage);
+        if (startupWarningMessage != null && ui instanceof UiManager) { (
+            (UiManager) ui).showStartupWarning(startupWarningMessage);
         }
     }
 
