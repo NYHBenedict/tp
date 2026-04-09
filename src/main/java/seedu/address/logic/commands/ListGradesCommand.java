@@ -26,34 +26,45 @@ public class ListGradesCommand extends Command {
     public static final String COMMAND_WORD = "listgrades";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-        + ": Lists grades for a course, a course assessment, or a student.\n"
-        + "Parameters:\n"
-        + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
-        + "  " + PREFIX_COURSE_CODE + "COURSE_CODE " + PREFIX_ASSESSMENT + "ASSESSMENT_INDEX\n"
-        + "  " + PREFIX_STUDENT_ID + "STUDENT_ID\n"
-        + "Examples:\n"
-        + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T\n"
-        + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
-        + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
+            + ": Lists grades for a course, a course assessment, or a student.\n"
+            + "Parameters:\n"
+            + "  " + PREFIX_COURSE_CODE + "COURSE_CODE\n"
+            + "  " + PREFIX_COURSE_CODE + "COURSE_CODE " + PREFIX_ASSESSMENT + "ASSESSMENT_INDEX\n"
+            + "  " + PREFIX_STUDENT_ID + "STUDENT_ID\n"
+            + "Examples:\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
+            + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
 
-    private final String filterType;
+    private enum FilterType {
+        STUDENT, COURSE, COURSE_ASSESSMENT
+    }
+
+    private final FilterType filterType;
     private final String filterValue1;
     private final Index assessmentIndex;
 
     /**
-        * Constructs a ListGradesCommand with the specified filter type and values.
-        * @param filterType      the type of filter ("student", "course", or "courseassessment")
-        * @param filterValue1    the value for the filter (student ID or course code)
-        * @param assessmentIndex the index of the assessment (only used for "courseassessment" filter type)
-    */
+     * Constructs a ListGradesCommand with the specified filter type and values.
+     * @param filterType      the type of filter
+     * @param filterValue1    the value for the filter
+     * @param assessmentIndex the index of the assessment
+     */
     public ListGradesCommand(String filterType, String filterValue1, Index assessmentIndex) {
-        this.filterType = filterType;
-
-        if (filterType.equalsIgnoreCase("course") || filterType.equalsIgnoreCase("courseassessment")) {
-            this.filterValue1 = filterValue1.trim().toUpperCase();
+        String normalizedFilterType = filterType.toLowerCase();
+        if ("student".equals(normalizedFilterType)) {
+            this.filterType = FilterType.STUDENT;
+        } else if ("course".equals(normalizedFilterType)) {
+            this.filterType = FilterType.COURSE;
+        } else if ("courseassessment".equals(normalizedFilterType)) {
+            this.filterType = FilterType.COURSE_ASSESSMENT;
         } else {
-            this.filterValue1 = filterValue1;
+            throw new IllegalArgumentException("Invalid filter type");
         }
+
+        this.filterValue1 = (this.filterType == FilterType.COURSE || this.filterType == FilterType.COURSE_ASSESSMENT)
+                ? filterValue1.trim().toUpperCase()
+                : filterValue1;
 
         this.assessmentIndex = assessmentIndex;
     }
@@ -62,8 +73,7 @@ public class ListGradesCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if ((filterType.equalsIgnoreCase("course")
-                || filterType.equalsIgnoreCase("courseassessment"))
+        if ((filterType == FilterType.COURSE || filterType == FilterType.COURSE_ASSESSMENT)
                 && !model.hasCourse(filterValue1)) {
             throw new CommandException(String.format(Messages.MESSAGE_COURSE_NOT_FOUND, filterValue1));
         }
@@ -74,7 +84,7 @@ public class ListGradesCommand extends Command {
             model.updateFilteredGradeList(grade -> false);
             model.setCurrentCourseForDisplay(java.util.Optional.empty());
             model.setDisplayMode(DisplayMode.GRADES);
-            return new CommandResult("No grades found.");
+            return new CommandResult(Messages.MESSAGE_NO_GRADES_FOUND);
         }
 
         Set<Grade> selectedGrades = new HashSet<>(grades);
@@ -86,16 +96,14 @@ public class ListGradesCommand extends Command {
     }
 
     private ObservableList<Grade> getFilteredGrades(Model model) throws CommandException {
-        switch (filterType.toLowerCase()) {
-        case "student":
+        switch (filterType) {
+        case STUDENT:
             return model.getGradesByStudentId(filterValue1);
-
-        case "course":
+        case COURSE:
             return FXCollections.observableArrayList(model.getGradesByCourse(filterValue1));
-
-        case "courseassessment":
-            ObservableList<Assessment> courseAssessments =
-                model.getAssessmentsForCourseInDisplayOrder(filterValue1);
+        case COURSE_ASSESSMENT:
+            ObservableList<Assessment> courseAssessments = model
+                    .getAssessmentsForCourseInDisplayOrder(filterValue1);
 
             if (courseAssessments.isEmpty()
                     || assessmentIndex == null
@@ -108,11 +116,9 @@ public class ListGradesCommand extends Command {
             String assessmentName = selectedAssessment.getAssessmentName().toString();
 
             return FXCollections.observableArrayList(
-                model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
-
+                    model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
         default:
-            throw new IllegalArgumentException(
-                "Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
+            throw new IllegalStateException("Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
         }
     }
 
@@ -125,7 +131,7 @@ public class ListGradesCommand extends Command {
             return false;
         }
         ListGradesCommand otherCommand = (ListGradesCommand) other;
-        return filterType.equalsIgnoreCase(otherCommand.filterType)
+        return filterType.equals(otherCommand.filterType)
             && filterValue1.equals(otherCommand.filterValue1)
             && java.util.Objects.equals(assessmentIndex, otherCommand.assessmentIndex);
     }

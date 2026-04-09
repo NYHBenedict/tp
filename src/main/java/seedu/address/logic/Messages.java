@@ -37,7 +37,6 @@ public class Messages {
     public static final String MESSAGE_GRADE_NOT_FOUND = "Grade not found.";
 
     public static final String MESSAGE_REMOVE_ASSESSMENT_SUCCESS = "Removed assessment: %1$s";
-    public static final String MESSAGE_INVALID_COURSE = "The course code provided is invalid.";
 
     public static final String MESSAGE_LIST_GRADES_SUCCESS = "Displayed grades.";
     public static final String MESSAGE_NO_GRADES_FOUND = "No grades found.";

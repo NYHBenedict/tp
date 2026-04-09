@@ -5,9 +5,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ASSESSMENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_CODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -58,29 +55,18 @@ public class RemoveGradeCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (model.getCourse(courseCode).isEmpty()) {
+        if (!model.hasCourse(courseCode)) {
             throw new CommandException(Messages.MESSAGE_INVALID_COURSE_CODE);
         }
 
-        boolean studentExistsInCourse = model.getCourse(courseCode).get().getStudents().stream()
-                .anyMatch(student -> student.getStudentId().equalsIgnoreCase(studentId));
-
-        if (!studentExistsInCourse) {
+        if (!model.isStudentEnrolled(courseCode, studentId)) {
             throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_ID);
         }
 
-        List<Assessment> courseAssessments = model.getAssessmentList().stream()
-                .filter(assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode))
-                .collect(Collectors.toList());
-
-        if (assessmentIndex.getZeroBased() >= courseAssessments.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_ASSESSMENT_INDEX);
-        }
-
-        Assessment assessment = courseAssessments.get(assessmentIndex.getZeroBased());
+        Assessment assessment = model.getAssessmentForCourseByIndex(courseCode, assessmentIndex)
+                .orElseThrow(() -> new CommandException(Messages.MESSAGE_INVALID_ASSESSMENT_INDEX));
 
         Grade toRemove = new Grade(new StudentId(studentId), assessment.getAssessmentName(), courseCode);
-
         if (!model.hasGrade(toRemove)) {
             throw new CommandException(Messages.MESSAGE_GRADE_NOT_FOUND);
         }

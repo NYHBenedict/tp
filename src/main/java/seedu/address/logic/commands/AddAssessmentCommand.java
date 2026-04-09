@@ -7,6 +7,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.assessment.AssessmentName;
+import seedu.address.model.assessment.AssessmentNameSimilarityPolicy;
 import seedu.address.model.assessment.MaxScore;
 
 /**
@@ -84,13 +85,14 @@ public class AddAssessmentCommand extends Command {
                 String existingName = existing.getAssessmentName().getNormalizedName();
                 String newName = toAdd.getAssessmentName().getNormalizedName();
 
-                if (!existingName.equals(newName) && areLikelyTypos(existingName, newName)) {
+                if (!existingName.equals(newName)
+                        && AssessmentNameSimilarityPolicy
+                                .areLikelyTypos(existingName, newName)) {
                     throw new CommandException(String.format(
                             Messages.MESSAGE_SIMILAR_ASSESSMENT, existing.getAssessmentName()));
                 }
             }
         }
-
         model.addAssessment(toAdd);
         return new CommandResult(String.format(Messages.MESSAGE_ADD_ASSESSMENT_SUCCESS, toAdd));
     }
@@ -128,53 +130,6 @@ public class AddAssessmentCommand extends Command {
         }
 
         return distanceTable[firstLength][secondLength];
-    }
-
-    /**
-     * Returns true if two assessment names are likely spelling mistakes
-     * of each other rather than genuinely different assessments.
-     */
-    private boolean areLikelyTypos(String firstName, String secondName) {
-        String firstBaseName = removeTrailingNumber(firstName);
-        String secondBaseName = removeTrailingNumber(secondName);
-
-        String firstTrailingNumber = getTrailingNumber(firstName);
-        String secondTrailingNumber = getTrailingNumber(secondName);
-
-        boolean bothHaveNumbers = !firstTrailingNumber.isEmpty() && !secondTrailingNumber.isEmpty();
-        boolean sameBaseName = firstBaseName.equals(secondBaseName);
-        boolean differentNumbers = !firstTrailingNumber.equals(secondTrailingNumber);
-
-        // Allow names like "quiz 1" and "quiz 2", "presentation 1" and "presentation 2"
-        if (bothHaveNumbers && sameBaseName && differentNumbers) {
-            return false;
-        }
-
-        // Otherwise, check whether the names are very close
-        return getEditDistance(firstName, secondName) <= 2;
-    }
-
-    /**
-     * Removes a trailing number from the assessment name.
-     * Example: "quiz 2" -> "quiz"
-     */
-    private String removeTrailingNumber(String assessmentName) {
-        return assessmentName.replaceFirst("\\s+\\d+$", "").trim();
-    }
-
-    /**
-     * Returns the trailing number in the assessment name, if any.
-     * Example: "quiz 2" -> "2"
-     */
-    private String getTrailingNumber(String assessmentName) {
-        String trimmedName = assessmentName.trim();
-        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(\\d+)$").matcher(trimmedName);
-
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-
-        return "";
     }
 
     @Override

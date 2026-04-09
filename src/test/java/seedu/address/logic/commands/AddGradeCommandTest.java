@@ -404,6 +404,17 @@ public class AddGradeCommandTest {
         public void updateFilteredAssessmentList(Predicate<Assessment> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean isStudentEnrolled(String courseCode, String studentId) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public java.util.Optional<Assessment> getAssessmentForCourseByIndex(
+                String courseCode, seedu.address.commons.core.index.Index assessmentIndex) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -422,6 +433,34 @@ public class AddGradeCommandTest {
                 return Optional.of(course);
             }
             return Optional.empty();
+        }
+
+        @Override
+        public boolean hasCourse(String courseCode) {
+            requireNonNull(courseCode);
+            return course != null && course.getCourseCode().equalsIgnoreCase(courseCode);
+        }
+
+        @Override
+        public boolean isStudentEnrolled(String courseCode, String studentId) {
+            requireNonNull(courseCode);
+            requireNonNull(studentId);
+            return course != null
+                    && course.getCourseCode().equalsIgnoreCase(courseCode)
+                    && course.getStudents().stream()
+                    .anyMatch(student -> student.getStudentId().equalsIgnoreCase(studentId));
+        }
+
+        @Override
+        public Optional<Assessment> getAssessmentForCourseByIndex(String courseCode, Index assessmentIndex) {
+            requireNonNull(courseCode);
+            requireNonNull(assessmentIndex);
+            ObservableList<Assessment> courseAssessments = assessments.filtered(
+                    assessment -> assessment.getCourseCode().equalsIgnoreCase(courseCode));
+            if (assessmentIndex.getZeroBased() >= courseAssessments.size()) {
+                return Optional.empty();
+            }
+            return Optional.of(courseAssessments.get(assessmentIndex.getZeroBased()));
         }
 
         @Override
