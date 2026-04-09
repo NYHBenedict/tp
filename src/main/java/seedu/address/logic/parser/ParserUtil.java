@@ -31,12 +31,6 @@ public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
 
-    private static final int MIN_COURSE_CODE_LENGTH = 2;
-    private static final int MAX_COURSE_CODE_LENGTH = 10;
-    private static final String COURSE_CODE_PATTERN =
-            "[A-Z0-9]{" + MIN_COURSE_CODE_LENGTH + "," + MAX_COURSE_CODE_LENGTH + "}";
-
-
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
      * and trailing whitespaces will be
@@ -207,13 +201,13 @@ public class ParserUtil {
      */
     public static String parseCourseCode(String courseCode) throws ParseException {
         requireNonNull(courseCode);
-        String normalizedCourseCode = courseCode.trim().toUpperCase();
+        String trimmedCourseCode = courseCode.trim().toUpperCase();
 
-        if (!normalizedCourseCode.matches(COURSE_CODE_PATTERN)) {
+        if (!Course.isValidCourseCode(trimmedCourseCode)) {
             throw new ParseException(Course.MESSAGE_CONSTRAINTS);
         }
 
-        return normalizedCourseCode;
+        return trimmedCourseCode;
     }
 
     /**
