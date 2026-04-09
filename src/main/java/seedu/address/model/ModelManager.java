@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.core.index.Index;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
 import seedu.address.model.grade.Grade;
@@ -242,6 +243,25 @@ public class ModelManager implements Model {
                 && currentCourseForDisplay.get().equalsIgnoreCase(courseCode)) {
             refreshFilteredStudents();
         }
+    }
+
+    @Override
+    public boolean isStudentEnrolled(String courseCode, String studentId) {
+        requireAllNonNull(courseCode, studentId);
+        return getCourse(courseCode)
+                .map(course -> course.hasStudent(studentId))
+                .orElse(false);
+    }
+
+    @Override
+    public Optional<Assessment> getAssessmentForCourseByIndex(String courseCode, Index assessmentIndex) {
+        requireAllNonNull(courseCode, assessmentIndex);
+        ObservableList<Assessment> courseAssessments = getAssessmentsForCourseInDisplayOrder(courseCode);
+        int zeroBased = assessmentIndex.getZeroBased();
+        if (zeroBased >= courseAssessments.size()) {
+            return Optional.empty();
+        }
+        return Optional.of(courseAssessments.get(zeroBased));
     }
 
     // =========== Student GUI display state =============================================================
