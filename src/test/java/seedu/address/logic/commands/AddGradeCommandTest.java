@@ -92,8 +92,8 @@ public class AddGradeCommandTest {
         AddGradeCommand command = new AddGradeCommand("CS9999",
                 "A1234567X", Index.fromOneBased(1), new Score("9"));
 
-        assertThrows(CommandException.class, Messages.MESSAGE_INVALID_COURSE_CODE, (
-            ) -> command.execute(modelStub));
+        assertThrows(CommandException.class,
+                String.format(Messages.MESSAGE_COURSE_NOT_FOUND, "CS9999"), () -> command.execute(modelStub));
     }
 
     @Test

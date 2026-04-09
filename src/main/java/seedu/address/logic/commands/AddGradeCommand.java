@@ -50,16 +50,8 @@ public class AddGradeCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (!model.hasCourse(courseCode)) {
-            throw new CommandException(Messages.MESSAGE_INVALID_COURSE_CODE);
-        }
-
-        if (!model.isStudentEnrolled(courseCode, studentId)) {
-            throw new CommandException(Messages.MESSAGE_INVALID_STUDENT_ID);
-        }
-
-        Assessment assessment = model.getAssessmentForCourseByIndex(courseCode, assessmentIndex)
-                .orElseThrow(() -> new CommandException(Messages.MESSAGE_INVALID_ASSESSMENT_INDEX));
+        Assessment assessment = GradeCommandValidator.validateAndGetAssessment(
+                model, courseCode, studentId, assessmentIndex);
 
         if (score.toDouble() > assessment.getMaxScore().toDouble()) {
             throw new CommandException(Messages.MESSAGE_SCORE_EXCEEDS_MAX);

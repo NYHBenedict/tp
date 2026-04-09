@@ -37,7 +37,7 @@ public class ListAssessmentsCommandTest {
 
         CommandResult result = new ListAssessmentsCommand().execute(modelStub);
 
-        assertEquals("No assessments found.", result.getFeedbackToUser());
+        assertEquals(Messages.MESSAGE_NO_ASSESSMENTS, result.getFeedbackToUser());
     }
 
     @Test

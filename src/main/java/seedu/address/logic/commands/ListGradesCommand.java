@@ -36,7 +36,10 @@ public class ListGradesCommand extends Command {
             + "  " + COMMAND_WORD + " " + PREFIX_COURSE_CODE + "CS2103T " + PREFIX_ASSESSMENT + "1\n"
             + "  " + COMMAND_WORD + " " + PREFIX_STUDENT_ID + "A0123456X";
 
-    private enum FilterType {
+    /**
+     * Supported grade listing filters.
+     */
+    public enum FilterType {
         STUDENT, COURSE, COURSE_ASSESSMENT
     }
 
@@ -50,17 +53,10 @@ public class ListGradesCommand extends Command {
      * @param filterValue1    the value for the filter
      * @param assessmentIndex the index of the assessment
      */
-    public ListGradesCommand(String filterType, String filterValue1, Index assessmentIndex) {
-        String normalizedFilterType = filterType.toLowerCase();
-        if ("student".equals(normalizedFilterType)) {
-            this.filterType = FilterType.STUDENT;
-        } else if ("course".equals(normalizedFilterType)) {
-            this.filterType = FilterType.COURSE;
-        } else if ("courseassessment".equals(normalizedFilterType)) {
-            this.filterType = FilterType.COURSE_ASSESSMENT;
-        } else {
-            throw new IllegalArgumentException("Invalid filter type");
-        }
+    public ListGradesCommand(FilterType filterType, String filterValue1, Index assessmentIndex) {
+        requireNonNull(filterType);
+        requireNonNull(filterValue1);
+        this.filterType = filterType;
 
         this.filterValue1 = (this.filterType == FilterType.COURSE || this.filterType == FilterType.COURSE_ASSESSMENT)
                 ? filterValue1.trim().toUpperCase()
@@ -118,7 +114,7 @@ public class ListGradesCommand extends Command {
             return FXCollections.observableArrayList(
                     model.getGradesByCourseAndAssessment(storedCourseCode, assessmentName));
         default:
-            throw new IllegalStateException("Invalid filter type. Use 'student', 'course', or 'courseassessment'.");
+            throw new IllegalStateException("Invalid filter type");
         }
     }
 

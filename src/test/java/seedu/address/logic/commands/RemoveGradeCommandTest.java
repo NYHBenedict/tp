@@ -119,8 +119,7 @@ public class RemoveGradeCommandTest {
                 "A1234567X", Index.fromOneBased(1));
 
         assertThrows(CommandException.class,
-                String.format(Messages.MESSAGE_INVALID_COURSE_CODE, "CS9999"), (
-                    ) -> command.execute(modelStub));
+                String.format(Messages.MESSAGE_COURSE_NOT_FOUND, "CS9999"), () -> command.execute(modelStub));
     }
 
     @Test

@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -240,8 +241,20 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseStudentId_invalidMessage_throwsParseExceptionWithCentralizedMessage() {
+        assertThrows(ParseException.class, Messages.MESSAGE_INVALID_STUDENT_ID_FORMAT, () ->
+                ParserUtil.parseStudentId("A1"));
+    }
+
+    @Test
     public void parseStudentId_valid_success() throws Exception {
         assertEquals("A0123456X", ParserUtil.parseStudentId("a0123456x"));
+    }
+
+    @Test
+    public void parseStudentName_invalid_throwsParseExceptionWithCentralizedMessage() {
+        assertThrows(ParseException.class, Messages.MESSAGE_INVALID_STUDENT_NAME_FORMAT, () ->
+                ParserUtil.parseStudentName("1234"));
     }
 
 }
