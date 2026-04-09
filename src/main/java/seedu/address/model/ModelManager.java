@@ -19,7 +19,6 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.assessment.Assessment;
 import seedu.address.model.course.Course;
 import seedu.address.model.grade.Grade;
-import seedu.address.model.person.Person;
 import seedu.address.model.student.Student;
 
 /**
@@ -30,11 +29,9 @@ public class ModelManager implements Model {
 
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Person> filteredPersons;
     private final FilteredList<Course> filteredCourses;
     private final FilteredList<Assessment> filteredAssessments;
     private final FilteredList<Grade> filteredGrades;
-    // Student GUI display state
     private DisplayMode displayMode = DisplayMode.COURSES;
     private Optional<String> currentCourseForDisplay = Optional.empty();
     private final ObservableList<Student> filteredStudents = FXCollections.observableArrayList();
@@ -50,18 +47,19 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         filteredCourses = new FilteredList<>(this.addressBook.getCourseList());
         filteredAssessments = new FilteredList<>(this.addressBook.getAssessmentList());
         filteredGrades = new FilteredList<>(this.addressBook.getGradeList());
     }
 
+    /**
+     * Creates a ModelManager with empty data.
+     */
     public ModelManager() {
         this(new AddressBook(), new UserPrefs());
     }
 
-    // =========== UserPrefs
-    // ==================================================================================
+    // =========== UserPrefs ==================================================================================
 
     @Override
     public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
@@ -96,8 +94,7 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
-    // =========== AddressBook
-    // ================================================================================
+    // =========== AddressBook ================================================================================
 
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
@@ -107,30 +104,6 @@ public class ModelManager implements Model {
     @Override
     public ReadOnlyAddressBook getAddressBook() {
         return addressBook;
-    }
-
-    @Override
-    public boolean hasPerson(Person person) {
-        requireNonNull(person);
-        return addressBook.hasPerson(person);
-    }
-
-    @Override
-    public void deletePerson(Person target) {
-        addressBook.removePerson(target);
-    }
-
-    @Override
-    public void addPerson(Person person) {
-        addressBook.addPerson(person);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-    }
-
-    @Override
-    public void setPerson(Person target, Person editedPerson) {
-        requireAllNonNull(target, editedPerson);
-
-        addressBook.setPerson(target, editedPerson);
     }
 
     @Override
@@ -176,55 +149,42 @@ public class ModelManager implements Model {
         addressBook.removeGrade(grade);
     }
 
-    // =========== Grade filtering methods
-    // =============================================================
+    @Override
+    public ObservableList<Grade> getGradeList() {
+        return addressBook.getGradeList();
+    }
 
-    /**
-     * Get a list of grades filtered by student ID.
-     */
+    // =========== Grade filtering methods =============================================================
+
     @Override
     public ObservableList<Grade> getGradesByStudentId(String studentId) {
         requireNonNull(studentId);
         String normalizedStudentId = studentId.trim().toUpperCase();
-
         return FXCollections.observableArrayList(
                 addressBook.getGradeList().stream()
                         .filter(grade -> grade.getStudentId().toString().equalsIgnoreCase(normalizedStudentId))
                         .collect(Collectors.toList()));
     }
 
-    /**
-     * Get a list of grades filtered by course code.
-     */
+    @Override
     public ObservableList<Grade> getGradesByCourse(String courseCode) {
         requireNonNull(courseCode);
-        ObservableList<Grade> filteredGrades = FXCollections.observableArrayList(
+        return FXCollections.observableArrayList(
                 addressBook.getGradeList().stream()
                         .filter(grade -> grade.getCourseCode().equalsIgnoreCase(courseCode))
                         .collect(Collectors.toList()));
-        return filteredGrades;
     }
 
-    /**
-     * Get a list of grades filtered by both course code and assessment name.
-     */
+    @Override
     public ObservableList<Grade> getGradesByCourseAndAssessment(String courseCode, String assessmentName) {
         requireNonNull(courseCode);
         requireNonNull(assessmentName);
-
         String trimmedAssessmentName = assessmentName.trim();
-
         return FXCollections.observableArrayList(
                 addressBook.getGradeList().stream()
                         .filter(grade -> grade.getCourseCode().equalsIgnoreCase(courseCode)
                                 && grade.getAssessmentName().toString().equals(trimmedAssessmentName))
                         .collect(Collectors.toList()));
-    }
-
-    // =========== Other methods (e.g., getGradeList, etc.) remain the same...
-
-    public ObservableList<Grade> getGradeList() {
-        return addressBook.getGradeList();
     }
 
     @Override
@@ -233,8 +193,7 @@ public class ModelManager implements Model {
         filteredGrades.setPredicate(predicate);
     }
 
-    // =========== Course / Student operations
-    // =============================================================
+    // =========== Course / Student operations =============================================================
 
     @Override
     public ObservableList<Course> getCourseList() {
@@ -285,8 +244,7 @@ public class ModelManager implements Model {
         }
     }
 
-    // =========== Student GUI display state
-    // =============================================================
+    // =========== Student GUI display state =============================================================
 
     @Override
     public ObservableList<Student> getFilteredStudentList() {
@@ -357,32 +315,12 @@ public class ModelManager implements Model {
         filteredStudents.setAll(new ArrayList<>(course.get().getStudents()));
     }
 
-    // =========== Filtered Person List Accessors
-    // =============================================================
-
-    /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the
-     * internal list of
-     * {@code versionedAddressBook}
-     */
-    @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
-    }
-
-    @Override
-    public void updateFilteredPersonList(Predicate<Person> predicate) {
-        requireNonNull(predicate);
-        filteredPersons.setPredicate(predicate);
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof ModelManager)) {
             return false;
         }
@@ -390,7 +328,6 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons)
                 && filteredAssessments.equals(otherModelManager.filteredAssessments)
                 && filteredGrades.equals(otherModelManager.filteredGrades)
                 && displayMode.equals(otherModelManager.displayMode)
