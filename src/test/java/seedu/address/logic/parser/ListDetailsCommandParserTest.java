@@ -40,7 +40,7 @@ public class ListDetailsCommandParserTest {
 
     @Test
     public void parse_invalidCourseCode_failure() {
-        assertParseFailure(parser, " c/@@@", Course.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " c/@@@", Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test

@@ -125,7 +125,7 @@ public class ParserUtil {
         requireNonNull(courseCode);
         String trimmedCourseCode = courseCode.trim().toUpperCase();
         if (!Course.isValidCourseCode(trimmedCourseCode)) {
-            throw new ParseException(Course.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Course.MESSAGE_INVALID_COURSE_CODE);
         }
         return trimmedCourseCode;
     }
@@ -144,7 +144,7 @@ public class ParserUtil {
                 .toList();
 
         if (splitCourseCodes.isEmpty()) {
-            throw new ParseException(Course.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Course.MESSAGE_INVALID_COURSE_CODE);
         }
 
         List<String> parsedCourseCodes = new ArrayList<>();

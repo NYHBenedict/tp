@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddGradeCommand;
+import seedu.address.model.course.Course;
 import seedu.address.model.grade.Score;
 
 public class AddGradeCommandParserTest {
@@ -99,7 +100,7 @@ public class AddGradeCommandParserTest {
                 + PREFIX_ASSESSMENT + "1 "
                 + PREFIX_GRADE + "9";
 
-        assertParseFailure(parser, userInput, "❌ Invalid course code. Example: c/CS2103T");
+        assertParseFailure(parser, userInput, Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test

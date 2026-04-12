@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.RemoveAssessmentCommand;
+import seedu.address.model.course.Course;
 
 public class RemoveAssessmentCommandParserTest {
 
@@ -53,7 +54,7 @@ public class RemoveAssessmentCommandParserTest {
     public void parse_invalidCourseCode_failure() {
         String userInput = " " + PREFIX_COURSE_CODE + "CS 2103T " + PREFIX_ASSESSMENT + "1";
 
-        assertParseFailure(parser, userInput, "❌ Invalid course code. Example: c/CS2103T");
+        assertParseFailure(parser, userInput, Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test

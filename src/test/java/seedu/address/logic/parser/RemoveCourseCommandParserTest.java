@@ -72,7 +72,7 @@ public class RemoveCourseCommandParserTest {
     @Test
     public void parse_courseCodeWithSpaces_failure() {
         assertParseFailure(parser, " c/CS 2103T",
-                Course.MESSAGE_CONSTRAINTS);
+                Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class RemoveCourseCommandParserTest {
 
     @Test
     public void parse_invalidCourseCode_failure() {
-        assertParseFailure(parser, "c/@@@", Course.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "c/@@@", Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test

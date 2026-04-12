@@ -23,6 +23,7 @@ import seedu.address.model.assessment.Assessment;
 import seedu.address.model.assessment.AssessmentName;
 import seedu.address.model.assessment.MaxScore;
 import seedu.address.model.course.Course;
+import seedu.address.model.course.UniqueCourseList;
 import seedu.address.model.grade.Grade;
 
 public class ListCoursesCommandTest {
@@ -32,7 +33,7 @@ public class ListCoursesCommandTest {
         ModelStubWithNoCourses modelStub = new ModelStubWithNoCourses();
         CommandResult result = new ListCoursesCommand().execute(modelStub);
 
-        assertEquals("No courses added", result.getFeedbackToUser());
+        assertEquals(UniqueCourseList.MESSAGE_NO_COURSES, result.getFeedbackToUser());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class ListCoursesCommandTest {
                 java.util.Arrays.asList(new Course("CS2103T"))));
         CommandResult result = new ListCoursesCommand().execute(modelStub);
 
-        String expectedOutput = "";
+        String expectedOutput = String.format(ListCoursesCommand.MESSAGE_SUCCESS);
         assertEquals(expectedOutput, result.getFeedbackToUser());
     }
 
@@ -55,7 +56,7 @@ public class ListCoursesCommandTest {
         ModelStubWithCourses modelStub = new ModelStubWithCourses(courses);
         CommandResult result = new ListCoursesCommand().execute(modelStub);
 
-        String expectedOutput = "";
+        String expectedOutput = String.format(ListCoursesCommand.MESSAGE_SUCCESS);
         assertEquals(expectedOutput, result.getFeedbackToUser());
     }
 

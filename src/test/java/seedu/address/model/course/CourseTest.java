@@ -16,7 +16,8 @@ public class CourseTest {
 
     @Test
     public void constructor_invalidCourseCode_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, Course.MESSAGE_CONSTRAINTS, () -> new Course("CS 2103T"));
+        assertThrows(IllegalArgumentException.class, Course.MESSAGE_INVALID_COURSE_CODE, ()
+                -> new Course("CS 2103T"));
     }
 
     @Test

@@ -16,11 +16,11 @@ import seedu.address.model.course.exceptions.DuplicateCourseException;
  */
 public class UniqueCourseList implements Iterable<Course> {
 
+    public static final String MESSAGE_NO_COURSES = "No courses added";
+
     private final ObservableList<Course> internalList = FXCollections.observableArrayList();
     private final ObservableList<Course> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
-
-    public static final String MESSAGE_NO_COURSES = "No courses added";
 
     /**
      * Returns true if the list contains an equivalent course.

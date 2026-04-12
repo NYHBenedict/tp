@@ -22,7 +22,11 @@ import seedu.address.model.student.Student;
  */
 public class Course {
 
-    public static final String MESSAGE_CONSTRAINTS = "\u274C Invalid course code. \nOnly 2 to 10 alphanumeric characters with no spaces are allowed\nExample: c/CS2103T";
+    public static final String MESSAGE_USAGE = "\nOnly 2 to 10 alphanumeric characters "
+            + "with no spaces are allowed";
+    public static final String MESSAGE_INVALID_COURSE_CODE = "\u274C Invalid course code."
+            + MESSAGE_USAGE
+            + "\nExample: c/CS2103T";
     public static final String VALIDATION_REGEX = "[A-Z0-9]{2,10}";
 
     private final String courseCode;
@@ -37,7 +41,7 @@ public class Course {
     public Course(String courseCode) {
         requireNonNull(courseCode);
         String normalizedCourseCode = courseCode.trim().toUpperCase();
-        checkArgument(isValidCourseCode(normalizedCourseCode), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidCourseCode(normalizedCourseCode), MESSAGE_INVALID_COURSE_CODE);
 
         this.courseCode = normalizedCourseCode;
         this.students = FXCollections.observableArrayList();
