@@ -23,7 +23,7 @@ public class JsonAdaptedCourseTest {
     @Test
     public void toModelType_invalidCourseCode_throwsIllegalValueException() {
         JsonAdaptedCourse course = new JsonAdaptedCourse(INVALID_COURSE_CODE, List.of());
-        assertThrows(IllegalValueException.class, Course.MESSAGE_CONSTRAINTS, course::toModelType);
+        assertThrows(IllegalValueException.class, Course.MESSAGE_INVALID_COURSE_CODE, course::toModelType);
     }
 
     @Test

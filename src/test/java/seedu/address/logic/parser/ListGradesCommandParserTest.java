@@ -13,6 +13,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.ListGradesCommand;
 import seedu.address.logic.commands.ListGradesCommand.FilterType;
+import seedu.address.model.course.Course;
 
 public class ListGradesCommandParserTest {
 
@@ -64,8 +65,7 @@ public class ListGradesCommandParserTest {
     public void parse_invalidCourseCode_failure() {
         String userInput = " " + PREFIX_COURSE_CODE + "CS 2103T";
 
-        assertParseFailure(parser, userInput,
-                "❌ Invalid course code. Example: c/CS2103T");
+        assertParseFailure(parser, userInput, Course.MESSAGE_INVALID_COURSE_CODE);
     }
 
     @Test

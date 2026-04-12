@@ -117,7 +117,8 @@ public class ParserUtilTest {
 
     @Test
     public void parseCourseCode_invalidValue_throwsParseException() {
-        assertThrows(ParseException.class, Course.MESSAGE_CONSTRAINTS, () -> ParserUtil.parseCourseCode("CS 2103T"));
+        assertThrows(ParseException.class, Course.MESSAGE_INVALID_COURSE_CODE, ()
+                -> ParserUtil.parseCourseCode("CS 2103T"));
     }
 
     @Test

@@ -51,7 +51,7 @@ public class JsonAdaptedCourse {
             throw new IllegalValueException(MISSING_FIELD_MESSAGE_FORMAT);
         }
         if (!Course.isValidCourseCode(courseCode)) {
-            throw new IllegalValueException(Course.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(Course.MESSAGE_INVALID_COURSE_CODE);
         }
         final Course course = new Course(courseCode);
 

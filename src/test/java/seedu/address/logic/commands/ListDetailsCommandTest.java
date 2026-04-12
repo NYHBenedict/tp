@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +41,30 @@ public class ListDetailsCommandTest {
         ListDetailsCommand command = new ListDetailsCommand(List.of("CS2103T"));
         CommandResult result = command.execute(modelStub);
 
-        String expectedOutput = "";
+        String expectedOutput = String.format(ListDetailsCommand.MESSAGE_SUCCESS, course.toString());
 
         assertEquals(expectedOutput, result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_multipleCourses_success() throws Exception {
+        Course course = new Course("CS2103T");
+        Course anotherCourse = new Course("CS2101");
+
+        ModelStub modelStub = new ModelStub();
+        modelStub.courses.put("CS2103T", course);
+        modelStub.courses.put("CS2101", anotherCourse);
+
+        List<String> courseCodes = List.of("CS2103T", "CS2101");
+        ListDetailsCommand command = new ListDetailsCommand(courseCodes);
+        CommandResult result = command.execute(modelStub);
+
+        String expectedOutput = String.format(ListDetailsCommand.MESSAGE_SUCCESS, courseCodes.toString());
+
+        assertEquals(expectedOutput, result.getFeedbackToUser());
+        assertEquals(List.of(course, anotherCourse), modelStub.detailedCoursesForDisplay);
+        assertEquals(Optional.empty(), modelStub.currentCourseForDisplay);
+        assertEquals(DisplayMode.COURSE_DETAILS, modelStub.displayMode);
     }
 
     @Test
@@ -56,6 +78,9 @@ public class ListDetailsCommandTest {
 
     private static class ModelStub implements Model {
         private final Map<String, Course> courses = new HashMap<>();
+        private final List<Course> detailedCoursesForDisplay = new ArrayList<>();
+        private Optional<String> currentCourseForDisplay = Optional.of("CS2103T");
+        private DisplayMode displayMode = DisplayMode.COURSES;
 
         @Override
         public Optional<Course> getCourse(String courseCode) {
@@ -170,13 +195,19 @@ public class ListDetailsCommandTest {
         }
 
         @Override
+        public void setDetailedCoursesForDisplay(List<Course> courses) {
+            detailedCoursesForDisplay.clear();
+            detailedCoursesForDisplay.addAll(courses);
+        }
+
+        @Override
         public void setCurrentCourseForDisplay(Optional<String> courseCode) {
-            // no-op for GUI state updates
+            currentCourseForDisplay = courseCode;
         }
 
         @Override
         public Optional<String> getCurrentCourseForDisplay() {
-            throw new AssertionError("This method should not be called.");
+            return currentCourseForDisplay;
         }
 
         @Override
@@ -216,12 +247,12 @@ public class ListDetailsCommandTest {
 
         @Override
         public void setDisplayMode(DisplayMode displayMode) {
-            // no-op for GUI state updates
+            this.displayMode = displayMode;
         }
 
         @Override
         public DisplayMode getDisplayMode() {
-            throw new AssertionError("This method should not be called.");
+            return displayMode;
         }
 
         @Override
