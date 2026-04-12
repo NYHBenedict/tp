@@ -24,7 +24,7 @@ If you prefer typing commands quickly, GradeBookPlus helps you manage class reco
 
 4. Open a terminal in that folder and run:
 
-   `java -jar gradebookplus.jar`
+   `java -jar GradeBookPlus.jar`
 
 5. Wait a few seconds for the application window to appear.
 
@@ -182,6 +182,12 @@ Examples:
 * `addassessment c/CS2103T an/Quiz 1 m/10`
 * `addassessment c/CS2103T an/Final Exam m/100`
 
+Notes:
+* The course must already exist.
+* Assessment names cannot be blank and must be at most 50 characters long.
+* Maximum score must be greater than 0 and at most 999, with at most 1 decimal place.
+* The same assessment cannot be added twice to the same course.
+
 ![Example of AddAssessment](images/AssessmentCommands/addassessmentCommand.png)
 
 ### Listing assessments: `listassessments`
@@ -198,6 +204,10 @@ Examples:
 * `listassessments`
 * `listassessments c/CS2103T`
 
+Notes:
+* If a course code is provided, the course must already exist.
+* If no matching assessments are found, the app displays a message instead of an empty result.
+
 ![Example of ListAssessments](images/AssessmentCommands/listassessmentsCommand.png)
 
 ![Example of ListAssessmentsCourseFilter](images/AssessmentCommands/listassessmentsfiltercourseCommand.png)
@@ -213,7 +223,10 @@ Format: `removeassessment c/COURSE_CODE as/ASSESSMENT_INDEX`
 Example:
 * `removeassessment c/CS2103T as/1`
 
-> Removing an assessment also removes all grades associated with that assessment.
+Notes:
+* The course must already exist.
+* The assessment index must be a non-zero unsigned integer shown in the assessment list for that course.
+* Removing an assessment also removes all grades associated with that assessment.
 
 ![Example of ListAssessment](images/AssessmentCommands/removeassessmentCommand.png)
 
@@ -236,6 +249,12 @@ Examples:
 > The student must already be enrolled in the course.<br>
 > The score cannot exceed the assessment’s max score.
 
+Additional notes:
+* The course must already exist.
+* The assessment index must refer to an assessment in the specified course.
+* The score must be 0 or above, at most 999, and have at most 1 decimal place.
+* A student can have only one grade for the same assessment. To change a score, remove the existing grade first and add the new grade.
+
 ![Example of AddGrade](images/GradeCommands/addgradeCommand.png)
 
 ### Listing grades: `listgrades`
@@ -254,6 +273,12 @@ Examples:
 * `listgrades c/CS2103T as/1`
 * `listgrades id/A0123456X`
 
+Notes:
+* Use either `id/STUDENT_ID` alone, or `c/COURSE_CODE` with an optional `as/ASSESSMENT_INDEX`.
+* If a course code is provided, the course must already exist.
+* If an assessment index is provided, it must refer to an assessment in the specified course.
+* If no matching grades are found, the app displays a message instead of an empty result.
+
 ![Example of ListGrades](images/GradeCommands/listgradesCommand.png)
 
 ### Removing a grade: `removegrade`
@@ -266,6 +291,12 @@ Format: `removegrade c/COURSE_CODE id/STUDENT_ID as/ASSESSMENT_INDEX`
 
 Example:
 * `removegrade c/CS2103T id/A0123456X as/1`
+
+Notes:
+* The course must already exist.
+* The student must already be enrolled in the course.
+* The assessment index must refer to an assessment in the specified course.
+* The grade must already exist.
 
 ![Example of RemoveGrades](images/GradeCommands/removegradeCommand.png)
 
@@ -297,18 +328,29 @@ Format: `exportcourse c/COURSE_CODE`
 Example:
 * `exportcourse c/CS2103T`
 
-### Viewing all main lists: `viewall`
+### Viewing overall summary: `viewall`
 
-**Purpose:** Use this command to return to the default overall view and get a quick summary of the stored data.
-
-Returns the app to the default overall view.
+Displays an overview summary of the current assessment and grade data.
 
 Format: `viewall`
 
-Note:
-* `viewall` currently displays a text summary in the result box.
-* It is useful for checking the current number of assessments and grades quickly.
-* The command also shows how many grades are recorded for each assessment.
+Example:
+* `viewall`
+
+Expected outcome:
+* Displays the total number of assessments currently stored in the app.
+* Displays the total number of grades currently stored in the app.
+* Displays the number of grades recorded for each assessment.
+
+Typical usage:
+* Use `viewall` after adding or removing assessments to confirm that the assessment count has updated as expected.
+* Use `viewall` after adding or removing grades to quickly verify that the overall grade count has changed.
+* Use `viewall` when you want a quick summary without manually switching through multiple list commands.
+
+Notes:
+* `viewall` is intended as a lightweight overview command rather than a full detailed report.
+* The command is useful for quickly checking whether recent updates to assessment and grade records have been reflected in the system.
+* In an empty state, `viewall` still provides a quick way to confirm that there are currently no assessments or grades recorded.
 
 ### Exiting the program: `exit`
 
@@ -354,6 +396,9 @@ Format: `exit`
 
 **Q:** Why does adding an assessment sometimes fail with a "similar assessment" message?<br>
 **A:** GradeBookPlus rejects likely typo-duplicates (for example, very similar names in the same course) to prevent accidental duplicate assessment creation.
+
+**Q:** When should I use `viewall` instead of the other list commands?<br>
+**A:** Use `viewall` when you want a quick summary of overall assessment and grade data. Use commands such as `liststudents`, `listassessments`, and `listgrades` when you need more detailed records.
 
 --------------------------------------------------------------------------------------------------------------------
 
