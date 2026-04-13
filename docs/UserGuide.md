@@ -186,7 +186,8 @@ Notes:
 * The course must already exist.
 * Assessment names cannot be blank and must be at most 50 characters long.
 * Maximum score must be greater than 0 and at most 999, with at most 1 decimal place.
-* The same assessment cannot be added twice to the same course.
+* The same assessment cannot be added twice to the same course. Assessment names are compared after ignoring case and spaces.
+  For example, `Quiz 1`, `quiz   1`, and `QUIZ1` are considered the same assessment name in the same course.
 
 ![Example of AddAssessment](images/AssessmentCommands/addassessmentCommand.png)
 
@@ -394,8 +395,8 @@ Format: `exit`
 **Q:** What does "No grades found" or "No assessments found" mean?<br>
 **A:** The command ran successfully, but there are no matching records for the filter you requested.
 
-**Q:** Why does adding an assessment sometimes fail with a "similar assessment" message?<br>
-**A:** GradeBookPlus rejects likely typo-duplicates (for example, very similar names in the same course) to prevent accidental duplicate assessment creation.
+**Q:** Why does adding an assessment fail with "This assessment already exists"?<br>
+**A:** GradeBookPlus rejects duplicate assessment names in the same course after ignoring case and spaces. For example, if `Quiz 1` already exists in `CS2103T`, adding `quiz   1` or `QUIZ1` to `CS2103T` will fail.
 
 **Q:** When should I use `viewall` instead of the other list commands?<br>
 **A:** Use `viewall` when you want a quick summary of overall assessment and grade data. Use commands such as `liststudents`, `listassessments`, and `listgrades` when you need more detailed records.
