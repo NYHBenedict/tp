@@ -27,24 +27,37 @@ public class OverviewPanel extends UiPart<Region> {
     private Label gradesPerAssessmentLabel;
 
     /**
-     * Creates an {@code OverviewPanel}.
+     * Creates an {@code OverviewPanel} and fills it with the current summary data.
+     *
+     * @param logic Logic component used to access the current data.
      */
     public OverviewPanel(Logic logic) {
         super(FXML);
         fillOverview(logic);
     }
 
+    /**
+     * Fills the panel with the latest assessment and grade summary.
+     *
+     * @param logic Logic component used to access the current data.
+     */
     private void fillOverview(Logic logic) {
         int assessmentCount = logic.getAddressBook().getAssessmentList().size();
         int gradeCount = logic.getAddressBook().getGradeList().size();
 
         Map<String, Integer> gradesPerAssessment = new LinkedHashMap<>();
+
         for (Assessment assessment : logic.getAddressBook().getAssessmentList()) {
-            gradesPerAssessment.put(assessment.getAssessmentName().toString(), 0);
+            String key = formatAssessmentKey(
+                    assessment.getCourseCode().toString(),
+                    assessment.getAssessmentName().toString());
+            gradesPerAssessment.put(key, 0);
         }
 
         for (Grade grade : logic.getAddressBook().getGradeList()) {
-            String key = grade.getAssessmentName().toString();
+            String key = formatAssessmentKey(
+                    grade.getCourseCode().toString(),
+                    grade.getAssessmentName().toString());
             gradesPerAssessment.put(key, gradesPerAssessment.getOrDefault(key, 0) + 1);
         }
 
@@ -63,5 +76,16 @@ public class OverviewPanel extends UiPart<Region> {
             }
             gradesPerAssessmentLabel.setText(sb.toString());
         }
+    }
+
+    /**
+     * Returns a display key for an assessment using course code and assessment name.
+     *
+     * @param courseCode Course code of the assessment.
+     * @param assessmentName Name of the assessment.
+     * @return Formatted assessment key.
+     */
+    private String formatAssessmentKey(String courseCode, String assessmentName) {
+        return courseCode + " / " + assessmentName;
     }
 }
