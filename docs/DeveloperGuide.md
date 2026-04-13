@@ -298,7 +298,7 @@ The sequence diagram below shows the end-to-end `addgrade` interaction through `
 
 The activity diagram below summarizes the validation and execution branches for `addgrade`.
 
-![Activity flow for the `addgrade` command](images/AddGradeActivityDiagram.png)
+<img src="images/AddGradeActivityDiagram.png" alt="Activity flow for the addgrade command" width="500" />
 
 ### Display mode driven UI switching
 
