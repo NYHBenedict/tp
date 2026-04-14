@@ -408,12 +408,12 @@ The following activity diagram summarizes what happens when a user executes the 
 **Extensions**
 
 * 2a. User inputs invalid course code.
-  * 2a1. GradeBookPlus shows an error message.
+  * 2a1. GradeBookPlus shows "❌ Invalid course code. Example: c/CS2103T".
 
     Use case ends.
 
 * 3a. User inputs invalid student ID.
-    * 3a1. GradeBookPlus shows an error message.
+    * 3a1. GradeBookPlus shows "❌ Invalid student ID. Example: id/A0123456X".
 
       Use case ends.
 
@@ -429,13 +429,13 @@ The following activity diagram summarizes what happens when a user executes the 
 **Extensions**
 
 * 2a. The specified student cannot be found.
-  * 2a1. GradeBookPlus shows an error message
+  * 2a1. GradeBookPlus shows "The student ID provided is not enrolled in this course."
 
     Use case ends.
 
 * 3a. The given course code is invalid.
 
-    * 3a1. GradeBookPlus shows an error message.
+    * 3a1. GradeBookPlus shows "❌ Invalid course code. Example: c/CS2103T".
 
       Use case ends.
 
